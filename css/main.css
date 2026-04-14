@@ -79,7 +79,7 @@ header nav ul li {
     color: beige;
     position: relative;
     z-index: 10;
-     font-weight: 700;
+    font-weight: 700;
  }
 
 /* Оранжевая полоска при наведении (десктоп) */
@@ -195,7 +195,6 @@ header nav ul li a {
         font-size: clamp(0.9rem, 3.2vw, 1.3rem);
         padding: 0 0.8rem;
     }
-}
 
 .hero img {
   position: absolute;
@@ -203,4 +202,3 @@ header nav ul li a {
     right : 0px;
     padding-top: 200px;
 }
-
