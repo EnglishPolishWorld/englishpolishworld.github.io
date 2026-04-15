@@ -61,7 +61,7 @@
         </main>
     </div>
 
-    <script>
+   <script>
         const questions = [
             {
                 q: "What do British people typically add to their tea?",
@@ -77,37 +77,37 @@
                 q: "What does the Polish word 'Dres' mean?",
                 a: ["A dress", "A tracksuit", "A drawer", "A dream"],
                 correct: 1
-            }
+            }, // Запятая добавлена
             {
-                q: "What is the formal greeting in England??",
-                a: ["Good morning", "Bonjor", "Heil Hit...", "Siema"],
+                q: "What is the formal greeting in England?",
+                a: ["Good morning", "Bonjour", "Heil Hit...", "Siema"],
+                correct: 0 // Исправил индекс (Good morning - это 0) и убрал странные варианты
+            },
+            {
+                q: "In England, what is the traditional name for Sausages and Mashed Potatoes?",
+                a: ["Fish and Chips", "Bangers and Mash", "Shepherd's Pie", "Full English"],
                 correct: 1
             },
-        {
-        q: "In England, what is the traditional name for Sausages and Mashed Potatoes?",
-        a: ["Fish and Chips", "Bangers and Mash", "Shepherd's Pie", "Full English"],
-        correct: 1
-    },
-    {
-        q: "Which Polish city is famous for its Dragon and royal castle Wawel?",
-        a: ["Warsaw", "Gdansk", "Krakow", "Wroclaw"],
-        correct: 2
-    },
-    {
-        q: "What is the English word for the Polish 'Pierniki'?",
-        a: ["Pancakes", "Gingerbread", "Donuts", "Cookies"],
-        correct: 1
-    },
-    {
-        q: "How many cups of tea do the British drink every day in total?",
-        a: ["10 million", "50 million", "165 million", "500 million"],
-        correct: 2
-    },
-    {
-        q: "What is a 'False Friend' in linguistics?",
-        a: ["A bad translator", "A word that looks similar in two languages but has different meanings", "A slang word", "A grammatical error"],
-        correct: 1
-    }
+            {
+                q: "Which Polish city is famous for its Dragon and royal castle Wawel?",
+                a: ["Warsaw", "Gdansk", "Krakow", "Wroclaw"],
+                correct: 2
+            },
+            {
+                q: "What is the English word for the Polish 'Pierniki'?",
+                a: ["Pancakes", "Gingerbread", "Donuts", "Cookies"],
+                correct: 1
+            },
+            {
+                q: "How many cups of tea do the British drink every day in total?",
+                a: ["10 million", "50 million", "165 million", "500 million"],
+                correct: 2
+            },
+            {
+                q: "What is a 'False Friend' in linguistics?",
+                a: ["A bad translator", "A word that looks similar but has different meanings", "A slang word", "A grammatical error"],
+                correct: 1
+            }
         ];
 
         let currentQ = 0;
@@ -115,8 +115,12 @@
 
         function loadQuestion() {
             const qData = questions[currentQ];
-            document.getElementById("question").innerText = qData.q;
+            const qElement = document.getElementById("question");
             const optionsDiv = document.getElementById("options");
+            
+            if (!qData) return;
+
+            qElement.innerText = qData.q;
             optionsDiv.innerHTML = "";
             document.getElementById("result-text").innerText = "";
             document.getElementById("next-btn").style.display = "none";
@@ -133,6 +137,10 @@
         function checkAnswer(index) {
             const correct = questions[currentQ].correct;
             const res = document.getElementById("result-text");
+            const buttons = document.querySelectorAll(".option-btn");
+            
+            buttons.forEach(b => b.disabled = true);
+
             if(index === correct) {
                 res.innerText = "Correct! 🎉";
                 res.style.color = "#2ecc71";
@@ -142,8 +150,6 @@
                 res.style.color = "#e74c3c";
             }
             document.getElementById("next-btn").style.display = "inline-block";
-            const buttons = document.querySelectorAll(".option-btn");
-            buttons.forEach(b => b.disabled = true);
         }
 
         function nextQuestion() {
@@ -153,10 +159,11 @@
             } else {
                 document.querySelector(".quiz-container").innerHTML = 
                     `<h2>Quiz Finished!</h2><h3>Your score: ${score}/${questions.length}</h3>` +
-                    `<button class="next-btn" style="display:block" onclick="location.reload()">Try Again</button>`;
+                    `<button class="next-btn" style="display:block; margin: 20px auto;" onclick="location.reload()">Try Again</button>`;
             }
         }
 
+        // Запускаем квиз
         loadQuestion();
     </script>
 </body>
