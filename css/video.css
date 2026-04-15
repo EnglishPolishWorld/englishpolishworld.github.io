@@ -26,12 +26,6 @@ img {
 }
 
 /* 2. Оболочка и Контейнер */
-.wrapper {
-    background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
-    width: 100%;
-    min-height: 100vh;
-}
-
 .container {
     width: min(100% - 2rem, 1300px);
     margin: 0 auto;
@@ -84,9 +78,6 @@ header nav ul li.active a {
 }
 
 /* 4. СЕТКА КАРТОЧЕК (Для фактов и видео) */
-.hero {
-    padding: 40px 0;
-}
 
 .builds {
     display: grid;
@@ -155,3 +146,15 @@ header nav ul li.active a {
         flex-direction: column; /* Лого над меню */
         gap: 1rem;
         text-align: center;
+        
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hero {
+    flex: 1;
+    display: flex;
+    align-items: center; /* Центровка контента по высоте доски */
+}
