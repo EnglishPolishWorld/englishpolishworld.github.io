@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Quizzes</title>
+    <title>Ultimate Culture Quiz</title>
     <link rel="stylesheet" href="css/video.css">
     <style>
-        .quiz-container { text-align: center; padding: 20px; }
-        .options-grid { display: grid; gap: 10px; margin-top: 20px; }
+        /* Основной контейнер квиза */
+        .quiz-container { text-align: center; padding: 20px; width: 100%; }
         
+        /* Сетка для кнопок ответов: 2 колонки на ПК */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        
+        /* Адаптация: на мобилках кнопки встают в одну колонку */
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Стиль кнопок выбора ответа */
         .option-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #3498db;
@@ -17,66 +26,42 @@
             cursor: pointer;
             border-radius: 8px;
             transition: 0.3s;
-            font-family: 'Poppins', sans-serif;
             font-size: 1rem;
         }
+        /* Эффект наведения на кнопку */
         .option-btn:hover:not(:disabled) { background: #3498db; transform: translateY(-2px); }
+        /* Состояние кнопки после клика (отключена) */
         .option-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* Меню выбора */
+        /* Контейнер для карточек выбора тем */
         .quiz-menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             margin-top: 30px;
         }
+        /* Стиль карточки темы */
         .menu-card {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid #3498db;
-            padding: 40px 20px;
+            padding: 25px;
             border-radius: 15px;
             cursor: pointer;
             transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
         .menu-card:hover { 
-            background: rgba(52, 152, 219, 0.3); 
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background: rgba(52, 152, 219, 0.2); 
+            transform: scale(1.03);
         }
-        .menu-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #fff; }
-        .menu-card p { font-size: 0.9rem; opacity: 0.8; }
 
+        /* Текст результата (Правильно/Неправильно) */
         #result-text { margin-top: 20px; font-weight: bold; min-height: 24px; font-size: 1.2rem; }
         
+        /* Кнопка "Следующий вопрос" */
         .next-btn {
-            margin-top: 20px;
-            background: #D17338;
-            border: none;
-            padding: 12px 30px;
-            color: white;
-            border-radius: 30px;
-            display: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
+            margin-top: 20px; background: #D17338; border: none; padding: 12px 40px;
+            color: white; border-radius: 30px; display: none; cursor: pointer; font-weight: bold;
         }
-        
-        #progress { margin-bottom: 15px; font-size: 0.9rem; opacity: 0.7; letter-spacing: 1px; }
-        .back-btn { 
-            background: transparent; 
-            border: 1px solid rgba(255,255,255,0.3); 
-            color: #fff; 
-            padding: 8px 20px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-        .back-btn:hover { background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
@@ -86,38 +71,33 @@
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="sborki.html">Interesting Facts</a></li>
+                    <li><a href="sborki.html">Facts</a></li>
                     <li><a href="video.html">Videos</a></li>
                     <li class="active"><a href="quiz.html">Quizzes</a></li>
-                      <li><a href="games.html">Mini Games</a></li>
-                    <li><a href="repleyi.html">Information</a></li>
+                    <li><a href="games.html">Games</a></li>
+                    <li><a href="repleyi.html">Info</a></li>
                 </ul>
             </nav>
         </header>
 
         <main class="hero container">
-            <div class="builds" style="display: flex; justify-content: center;">
-                <div class="build" style="max-width: 850px; width: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center;">
+            <div class="builds" style="display: flex; justify-content: center; padding: 40px 0;">
+                <div class="build" style="max-width: 900px; width: 100%; background: rgba(0,0,0,0.4); border-radius: 25px; padding: 40px;">
                     
-                    <div id="quiz-selection" class="quiz-container">
-                        <h2 style="font-size: 2rem; margin-bottom: 10px;">Select Quiz Topic</h2>
-                        <p style="opacity: 0.7;">Test your knowledge about UK and Poland</p>
+                    <div id="quiz-selection">
+                        <h2 style="font-size: 2.2rem; margin-bottom: 40px; color: #3498db;">Select Your Challenge</h2>
                         <div class="quiz-menu">
-                            <div class="menu-card" onclick="startQuiz('general')">
-                                <h3>🌍 General Culture</h3>
-                                <p>Food, modern life, and fun facts</p>
-                            </div>
-                            <div class="menu-card" onclick="startQuiz('folklore')">
-                                <h3>🐉 Folklore & Legends</h3>
-                                <p>Ancient spirits, dragons and myths</p>
-                            </div>
+                            <div class="menu-card" onclick="startQuiz('general')"><h3>🌍 General</h3><p>20 Questions</p></div>
+                            <div class="menu-card" style="border-color: #9b59b6;" onclick="startQuiz('folklore')"><h3>🐉 Folklore</h3><p>20 Questions</p></div>
+                            <div class="menu-card" style="border-color: #2ecc71;" onclick="startQuiz('landmarks')"><h3>🏰 Landmarks</h3><p>20 Questions</p></div>
+                            <div class="menu-card" style="border-color: #f1c40f;" onclick="startQuiz('history')"><h3>⏳ History</h3><p>20 Questions</p></div>
                         </div>
                     </div>
 
-                    <div id="quiz-game" class="quiz-container" style="display: none; width: 100%;">
-                        <button class="back-btn" onclick="location.reload()">← Switch Topic</button>
-                        <div id="progress"></div>
-                        <h2 id="question" style="font-size: 1.6rem; margin-bottom: 20px;"></h2>
+                    <div id="quiz-game" style="display: none;">
+                        <button style="background:none; border:1px solid #555; color:#ccc; cursor:pointer; padding:5px 10px; border-radius:10px;" onclick="location.reload()">← Back</button>
+                        <div id="progress" style="margin:10px 0; opacity:0.6;"></div>
+                        <h2 id="question"></h2>
                         <div id="options" class="options-grid"></div>
                         <div id="result-text"></div>
                         <button id="next-btn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
@@ -129,90 +109,168 @@
     </div>
 
     <script>
+        // БАЗА ДАННЫХ ВОПРОСОВ (80 штук)
         const allQuizzes = {
             general: [
                 { q: "What do British people typically add to their tea?", a: ["Lemon", "Milk", "Salt", "Honey"], correct: 1 },
-                { q: "What is 'Pierogi' in Poland?", a: ["A type of dance", "A famous city", "Traditional dumplings", "A winter hat"], correct: 2 },
-                { q: "What does the Polish word 'Dres' mean?", a: ["A dress", "A tracksuit", "A drawer", "A dream"], correct: 1 },
-                { q: "In England, what is 'Bangers and Mash'?", a: ["Fish and Chips", "Sausages and Mashed Potatoes", "A dessert", "Full English"], correct: 1 },
-                { q: "What is the English word for the Polish 'Pierniki'?", a: ["Pancakes", "Gingerbread", "Donuts", "Cookies"], correct: 1 },
-                { q: "How many cups of tea do the British drink every day?", a: ["10 million", "50 million", "165 million", "500 million"], correct: 2 },
-                { q: "What is 'Zapiekanka' in Poland?", a: ["Popular street food", "Traditional soup", "Type of cake", "A drink"], correct: 0 },
-                { q: "What do the British call the 'Underground' in London?", a: ["The Metro", "The Subway", "The Tube", "The Tunnel"], correct: 2 },
-                { q: "Which of these is British?", a: ["Notre-Dame de Paris", "Epstein Island", "Buckingham Palace", "Sky Tower"], correct: 2 },
-                { q: "Which of these is the official British greeting?", a: ["Siema", "Good Morning", "Heil", "Bonjour"], correct: 1 }
+                { q: "What is 'Pierogi' in Poland?", a: ["Dance", "City", "Dumplings", "Hat"], correct: 2 },
+                { q: "What does the Polish word 'Dres' mean?", a: ["Dress", "Tracksuit", "Drawer", "Dream"], correct: 1 },
+                { q: "In England, what is 'Bangers and Mash'?", a: ["Fish/Chips", "Sausages/Potatoes", "Dessert", "Soup"], correct: 1 },
+                { q: "What is the English word for 'Pierniki'?", a: ["Pancakes", "Gingerbread", "Donuts", "Cookies"], correct: 1 },
+                { q: "Average daily tea consumption in the UK?", a: ["10m cups", "50m cups", "165m cups", "500m cups"], correct: 2 },
+                { q: "What is 'Zapiekanka'?", a: ["Street food", "Soup", "Cake", "Drink"], correct: 0 },
+                { q: "What is the 'Tube' in London?", a: ["Bus", "Subway", "River", "Bridge"], correct: 1 },
+                { q: "What is 'Bigos' in Poland?", a: ["Sweet cake", "Hunter's stew", "Drink", "Soup"], correct: 1 },
+                { q: "Common British greeting?", a: ["Siema", "Good Morning", "Heil", "Bonjour"], correct: 1 },
+                { q: "National flower of England?", a: ["Lily", "Rose", "Tulip", "Daisy"], correct: 1 },
+                { q: "Common Polish greeting?", a: ["Cześć", "Hello", "Hola", "Salut"], correct: 0 },
+                { q: "What is 'Pączek'?", a: ["Bread", "Donut", "Meat", "Salad"], correct: 1 },
+                { q: "Which side of the road do they drive in UK?", a: ["Right", "Left", "Middle", "Both"], correct: 1 },
+                { q: "Currency in Poland?", a: ["Euro", "Złoty", "Dollar", "Pound"], correct: 1 },
+                { q: "Currency in UK?", a: ["Euro", "Złoty", "Dollar", "Pound"], correct: 3 },
+                { q: "Traditional Sunday meal in UK?", a: ["Pizza", "Roast Dinner", "Sushi", "Tacos"], correct: 1 },
+                { q: "Main color of London buses?", a: ["Blue", "Yellow", "Red", "Green"], correct: 2 },
+                { q: "What is 'Żurek'?", a: ["Sweet juice", "Sour rye soup", "Alcohol", "Dessert"], correct: 1 },
+                { q: "Highest population city in Poland?", a: ["Kraków", "Warsaw", "Gdańsk", "Wrocław"], correct: 1 }
             ],
             folklore: [
-                { q: "Which legendary British outlaw lived in Sherwood Forest?", a: ["King Arthur", "Robin Hood", "Jack the Giant Killer", "William Wallace"], correct: 1 },
-                { q: "Which city is famous for the Dragon (Smok Wawelski)?", a: ["Warsaw", "Gdansk", "Krakow", "Poznan"], correct: 2 },
-                { q: "What is the mythical sword of King Arthur called?", a: ["Sting", "Excalibur", "Mjölnir", "Glamdring"], correct: 1 },
-                { q: "In Warsaw, there is a monument of a creature that protects the city. What is it?", a: ["A Griffin", "A Dragon", "A Mermaid (Syrenka)", "A Basilisk"], correct: 2 },
-                { q: "Who is 'Baba Yaga' in Slavic folklore?", a: ["Kind grandma", "Forest witch in a hut on chicken legs", "Water spirit", "Warrior queen"], correct: 1 },
-                { q: "What is the British 'Cheese Rolling' tradition?", a: ["A cooking contest", "Chasing a wheel of cheese down a hill", "A dance", "Making sandwiches"], correct: 1 },
-                { q: "What is 'Śmigus-Dyngus' in Poland?", a: ["Eating donuts", "Throwing water on Wet Monday", "Painting eggs", "Singing"], correct: 1 },
-                { q: "What birds must stay in the Tower of London to prevent its fall?", a: ["Pigeons", "Eagles", "Ravens", "Owls"], correct: 2 },
-                { q: "What do Polish people eat on Fat Thursday (Tłusty Czwartek)?", a: ["Sausages", "Pierogi", "Donuts (Pączki)", "Pizza"], correct: 2 },
-                { q: "Which mythical 'flower' do people look for on Midsummer Night?", a: ["Rose", "Fern Flower (Kwiat Paproci)", "Sunflower", "Tulip"], correct: 1 }
+                { q: "Legendary British outlaw in Sherwood Forest?", a: ["Arthur", "Robin Hood", "Jack", "Wallace"], correct: 1 },
+                { q: "City famous for the Wawel Dragon?", a: ["Warsaw", "Gdansk", "Krakow", "Poznan"], correct: 2 },
+                { q: "Warsaw mermaid monument name?", a: ["Griffin", "Syrenka", "Basilisk", "Nymph"], correct: 1 },
+                { q: "Who is 'Baba Yaga'?", a: ["Grandma", "Forest witch", "Spirit", "Queen"], correct: 1 },
+                { q: "Birds that protect the Tower of London?", a: ["Pigeons", "Eagles", "Ravens", "Owls"], correct: 2 },
+                { q: "What is 'Śmigus-Dyngus'?", a: ["Donuts", "Water throwing", "Eggs", "Singing"], correct: 1 },
+                { q: "What to eat on Fat Thursday?", a: ["Sausages", "Pierogi", "Donuts", "Pizza"], correct: 2 },
+                { q: "Who pulls Excalibur from the stone?", a: ["Lancelot", "Merlin", "Arthur", "Galahad"], correct: 2 },
+                { q: "Legendary 'Loch Ness' monster location?", a: ["Wales", "Scotland", "England", "Ireland"], correct: 1 },
+                { q: "Polish name for Midsummer Night?", a: ["Wigilia", "Noc Kupaлы", "Majówka", "Tłusty Czwartek"], correct: 1 },
+                { q: "The 'Leprechaun' is from which folklore?", a: ["English", "Irish", "Polish", "Welsh"], correct: 1 },
+                { q: "Who is the 'Lady of the Lake'?", a: ["Witch", "Magical being", "Queen", "Ghost"], correct: 1 },
+                { q: "Polish legend: Who stopped the sun?", a: ["Wałęsa", "Copernicus", "Chopin", "Pope"], correct: 1 },
+                { q: "Which animal is the symbol of Wales?", a: ["Lion", "Dragon", "Unicorn", "Eagle"], correct: 1 },
+                { q: "Scottish national animal?", a: ["Deer", "Unicorn", "Dog", "Cat"], correct: 1 },
+                { q: "Legend of 'Pan Twardowski' involves a trip to?", a: ["Mars", "Moon", "Sun", "Hell"], correct: 1 },
+                { q: "The 'Stone of Destiny' is used for?", a: ["Cooking", "Coronations", "Building", "War"], correct: 1 },
+                { q: "Who was Merlin?", a: ["King", "Knight", "Wizard", "Baker"], correct: 2 },
+                { q: "Polish 'Lajkonik' is a figure dressed as?", a: ["Knight", "Tatar on a horse", "Priest", "King"], correct: 1 },
+                { q: "What is a 'Banshee'?", a: ["Good fairy", "Wailing spirit", "Giant", "Dwarf"], correct: 1 }
+            ],
+            landmarks: [
+                { q: "Oldest monument among these?", a: ["Big Ben", "Stonehenge", "Tower", "Castle"], correct: 1 },
+                { q: "Salt mine near Krakow?", a: ["Wieliczka", "Bochnia", "Kłodawa", "Solotvyno"], correct: 0 },
+                { q: "Royal Mile city?", a: ["London", "Edinburgh", "Cardiff", "Belfast"], correct: 1 },
+                { q: "Venice of the North (Poland)?", a: ["Warsaw", "Gdańsk", "Wrocław", "Poznań"], correct: 2 },
+                { q: "British Monarch's London residence?", a: ["White House", "Buckingham Palace", "10 Downing", "Abbey"], correct: 1 },
+                { q: "Most famous mountain range in Poland?", a: ["Alps", "Tatras", "Pyrenees", "Sudetes"], correct: 1 },
+                { q: "Tallest building in UK?", a: ["The Shard", "The Gherkin", "Big Ben", "Sky Tower"], correct: 0 },
+                { q: "Where is Malbork Castle?", a: ["Germany", "UK", "Poland", "France"], correct: 2 },
+                { q: "London park with Speakers' Corner?", a: ["Central", "Hyde Park", "Regent's", "St. James"], correct: 1 },
+                { q: "Sea north of Poland?", a: ["North Sea", "Baltic Sea", "Black Sea", "Dead Sea"], correct: 1 },
+                { q: "Famous clock tower in London?", a: ["Small Ben", "Big Ben", "Time Tower", "London Eye"], correct: 1 },
+                { q: "Main river in Warsaw?", a: ["Odra", "Wisła", "Warta", "Bug"], correct: 1 },
+                { q: "Palace of Culture and Science location?", a: ["Kraków", "Warsaw", "Łódź", "Gdańsk"], correct: 1 },
+                { q: "Historic site of the 'Round Table'?", a: ["Camelot", "London", "Oxford", "York"], correct: 0 },
+                { q: "What is the 'London Eye'?", a: ["Museum", "Ferris Wheel", "Tower", "Bridge"], correct: 1 },
+                { q: "White Cliffs location?", a: ["Dover", "London", "Liverpool", "Manchester"], correct: 0 },
+                { q: "UNESCO site: Bialowieza Forest is?", a: ["Old Forest", "Mountain", "Lake", "Desert"], correct: 0 },
+                { q: "Where is the 'Giant's Causeway'?", a: ["England", "Scotland", "Northern Ireland", "Wales"], correct: 2 },
+                { q: "Famous university city in UK?", a: ["Oxford", "Bristol", "Leeds", "Dover"], correct: 0 },
+                { q: "Wawel Royal Castle location?", a: ["Warsaw", "Kraków", "Gdańsk", "Wrocław"], correct: 1 }
+            ],
+            history: [
+                { q: "First woman Nobel winner (Polish)?", a: ["Elizabeth II", "Marie Curie", "Florence", "Szymborska"], correct: 1 },
+                { q: "Battle of Hastings year?", a: ["1215", "1410", "1066", "1945"], correct: 2 },
+                { q: "Who 'stopped the sun'?", a: ["Chopin", "Copernicus", "Wałęsa", "Matejko"], correct: 1 },
+                { q: "UK Prime Minister during WWII?", a: ["Churchill", "Tony Blair", "Thatcher", "Johnson"], correct: 0 },
+                { q: "Polish May 3rd Constitution year?", a: ["1791", "1918", "1989", "1410"], correct: 0 },
+                { q: "Who wrote 'Hamlet'?", a: ["Dickens", "Shakespeare", "Wilde", "Rowling"], correct: 1 },
+                { q: "Great Fire of London year?", a: ["1348", "1666", "1812", "1901"], correct: 1 },
+                { q: "Last Polish King?", a: ["Casimir", "Sobieski", "Stanisław August", "Jagiełło"], correct: 2 },
+                { q: "Who was Henry VIII?", a: ["Scientist", "King", "Explorer", "Artist"], correct: 1 },
+                { q: "First King of Poland?", a: ["Mieszko I", "Bolesław I Brave", "Casimir", "Jagiełło"], correct: 1 },
+                { q: "Battle of Grunwald year?", a: ["1066", "1215", "1410", "1569"], correct: 2 },
+                { q: "Which Queen ruled for 63 years in 19th century?", a: ["Elizabeth I", "Mary", "Victoria", "Anne"], correct: 2 },
+                { q: "When did Poland regain independence?", a: ["1791", "1918", "1945", "1989"], correct: 1 },
+                { q: "Magna Carta signing year?", a: ["1066", "1215", "1410", "1776"], correct: 1 },
+                { q: "The 'Solidarity' leader?", a: ["Copernicus", "Wałęsa", "Wojtyła", "Chopin"], correct: 1 },
+                { q: "Who defeated the Spanish Armada?", a: ["Elizabeth I", "Victoria", "Henry VIII", "Arthur"], correct: 0 },
+                { q: "Main Polish city in Golden Age?", a: ["Warsaw", "Kraków", "Gdańsk", "Poznań"], correct: 1 },
+                { q: "Where was Chopin born?", a: ["Warsaw", "Żelazowa Wola", "Paris", "London"], correct: 1 },
+                { q: "Who discovered Penicillin (British)?", a: ["Newton", "Darwin", "Fleming", "Hawking"], correct: 2 },
+                { q: "Battle of Britain year?", a: ["1914", "1940", "1945", "1939"], correct: 1 }
             ]
         };
 
-        let currentQuestions = [];
-        let currentQ = 0;
-        let score = 0;
+        // ТЕХНИЧЕСКИЕ ПЕРЕМЕННЫЕ
+        let currentQuestions = []; // Массив вопросов выбранной темы
+        let currentQ = 0;           // Номер текущего вопроса (начинаем с 0)
+        let score = 0;              // Счетчик правильных ответов
 
+        // ФУНКЦИЯ ЗАПУСКА ТЕСТА
         function startQuiz(type) {
-            currentQuestions = allQuizzes[type];
-            currentQ = 0;
-            score = 0;
-            document.getElementById("quiz-selection").style.display = "none";
-            document.getElementById("quiz-game").style.display = "block";
-            loadQuestion();
+            currentQuestions = allQuizzes[type]; // Загружаем вопросы по ключу (напр. 'history')
+            currentQ = 0; // Сбрасываем номер вопроса
+            score = 0;    // Сбрасываем счет
+            document.getElementById("quiz-selection").style.display = "none"; // Прячем меню
+            document.getElementById("quiz-game").style.display = "block";      // Показываем игру
+            loadQuestion(); // Вызываем отрисовку вопроса
         }
 
+        // ФУНКЦИЯ ОТРИСОВКИ ВОПРОСА
         function loadQuestion() {
-            const qData = currentQuestions[currentQ];
-            document.getElementById("progress").innerText = `QUESTION ${currentQ + 1} OF ${currentQuestions.length}`;
-            document.getElementById("question").innerText = qData.q;
+            const qData = currentQuestions[currentQ]; // Получаем данные текущего вопроса
+            // Обновляем текст прогресса (напр. "Question 5 of 20")
+            document.getElementById("progress").innerText = `Question ${currentQ + 1} of ${currentQuestions.length}`;
+            document.getElementById("question").innerText = qData.q; // Вставляем сам вопрос
+            
             const optionsDiv = document.getElementById("options");
-            optionsDiv.innerHTML = "";
-            document.getElementById("result-text").innerText = "";
-            document.getElementById("next-btn").style.display = "none";
+            optionsDiv.innerHTML = ""; // Очищаем старые кнопки
+            document.getElementById("result-text").innerText = ""; // Очищаем текст ответа
+            document.getElementById("next-btn").style.display = "none"; // Прячем кнопку "Дальше"
 
+            // Создаем кнопки для каждого варианта ответа
             qData.a.forEach((opt, index) => {
                 const btn = document.createElement("button");
                 btn.className = "option-btn";
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index);
-                optionsDiv.appendChild(btn);
+                btn.onclick = () => checkAnswer(index); // При клике вызываем проверку
+                optionsDiv.appendChild(btn); // Добавляем кнопку на страницу
             });
         }
 
+        // ФУНКЦИЯ ПРОВЕРКИ ОТВЕТА
         function checkAnswer(index) {
-            const correct = currentQuestions[currentQ].correct;
+            const correct = currentQuestions[currentQ].correct; // Правильный индекс из базы
             const res = document.getElementById("result-text");
-            const buttons = document.querySelectorAll(".option-btn");
-            buttons.forEach(b => b.disabled = true);
+            // Отключаем все кнопки после клика, чтобы нельзя было нажать дважды
+            document.querySelectorAll(".option-btn").forEach(b => b.disabled = true);
 
             if(index === correct) {
                 res.innerText = "Correct! ✨";
-                res.style.color = "#2ecc71";
+                res.style.color = "#2ecc71"; // Зеленый цвет
                 score++;
             } else {
+                // Если ошибка — показываем правильный вариант
                 res.innerText = "Wrong! Correct answer: " + currentQuestions[currentQ].a[correct];
-                res.style.color = "#e74c3c";
+                res.style.color = "#e74c3c"; // Красный цвет
             }
-            document.getElementById("next-btn").style.display = "inline-block";
+            document.getElementById("next-btn").style.display = "inline-block"; // Показываем кнопку перехода
         }
 
+        // ФУНКЦИЯ ПЕРЕХОДА К СЛЕДУЮЩЕМУ ВОПРОСУ
         function nextQuestion() {
-            currentQ++;
+            currentQ++; // Увеличиваем индекс вопроса
             if(currentQ < currentQuestions.length) {
+                // Если вопросы еще есть — грузим следующий
                 loadQuestion();
             } else {
-                let rank = score > 7 ? "Culture Master! 🏆" : "Well Done! 👍";
+                // Если вопросы закончились — считаем процент и выводим финал
+                const percent = Math.round((score / currentQuestions.length) * 100);
+                let message = percent > 80 ? "Culture Master! 🏆" : "Well Done! 👍";
+                
                 document.getElementById("quiz-game").innerHTML = 
-                    `<h2 style="font-size: 2rem; color: #3498db;">${rank}</h2>` +
-                    `<p style="font-size: 1.5rem; margin: 20px 0;">Final Score: ${score} / ${currentQuestions.length}</p>` +
+                    `<h2 style="font-size: 2.5rem; color: #3498db;">${message}</h2>` +
+                    `<p style="font-size: 1.5rem; margin: 20px 0;">Final Result: ${score} / ${currentQuestions.length} (${percent}%)</p>` +
                     `<button class="next-btn" style="display:block; margin: 0 auto;" onclick="location.reload()">Back to Menu</button>`;
             }
         }
