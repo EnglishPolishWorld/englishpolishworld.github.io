@@ -67,38 +67,57 @@
             </nav>
         </header>
 
-        <main class="container">
-            <section class="game-section">
-                <div class="game-nav">
-                    <button class="game-btn active">Sorting Game</button>
-                    <button class="game-btn" onclick="alert('Coming Soon!')">Memory Cards</button>
-                    <button class="game-btn" onclick="alert('Coming Soon!')">Word Search</button>
+       <main class="container">
+    <section class="game-section">
+        
+        <div id="game-lobby">
+            <h1>Select a Mini-Game</h1>
+            <div class="game-nav" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <div class="game-card" onclick="openGame('sorting-game')">
+                    <h3>🧩 Sorting Game</h3>
+                    <p>Sort items between UK and Poland</p>
+                    <button class="game-btn">Play Now</button>
                 </div>
-
-                <h1>Country Sorter</h1>
-                <p>Drag all items to the boxes, then click "Check Results"!</p>
-
-                <div class="draggables" id="items-box">
-                    <div class="drag-item" draggable="true" id="item1" data-target="uk">Big Ben 🕰️</div>
-                    <div class="drag-item" draggable="true" id="item2" data-target="pl">Pierogi 🥟</div>
-                    <div class="drag-item" draggable="true" id="item3" data-target="uk">Double Decker 🚌</div>
-                    <div class="drag-item" draggable="true" id="item4" data-target="pl">Żubr 🦬</div>
-                    <div class="drag-item" draggable="true" id="item5" data-target="uk">Royal Guard 💂</div>
-                    <div class="drag-item" draggable="true" id="item6" data-target="pl">Wawel Dragon 🐉</div>
+                <div class="game-card" style="opacity: 0.6; cursor: not-allowed;">
+                    <h3>🧠 Memory Cards</h3>
+                    <p>Coming Soon...</p>
                 </div>
-
-                <div class="drop-zones">
-                    <div class="zone" id="uk"><h3>🇬🇧 UK</h3></div>
-                    <div class="zone" id="pl"><h3>🇵🇱 POLAND</h3></div>
+                <div class="game-card" style="opacity: 0.6; cursor: not-allowed;">
+                    <h3>🔍 Word Search</h3>
+                    <p>Coming Soon...</p>
                 </div>
+            </div>
+        </div>
 
-                <div style="margin-top: 30px;">
-                    <button id="check-btn" class="game-btn">Check Results</button>
-                    <button id="reset-btn" class="game-btn" style="background: #555;">Reset</button>
-                    <h2 id="scoretext" style="margin-top: 20px;"></h2>
-                </div>
-            </section>
-        </main>
+        <div id="sorting-game" style="display: none;">
+            <button onclick="backToLobby()" class="game-btn" style="background: #666; font-size: 0.9rem;">← Back to Menu</button>
+            
+            <h1>Country Sorter</h1>
+            <p>Drag all items to the boxes, then click "Check Results"!</p>
+
+            <div class="draggables" id="items-box">
+                <div class="drag-item" draggable="true" id="item1" data-target="uk">Big Ben 🕰️</div>
+                <div class="drag-item" draggable="true" id="item2" data-target="pl">Pierogi 🥟</div>
+                <div class="drag-item" draggable="true" id="item3" data-target="uk">Double Decker 🚌</div>
+                <div class="drag-item" draggable="true" id="item4" data-target="pl">Żubr 🦬</div>
+                <div class="drag-item" draggable="true" id="item5" data-target="uk">Royal Guard 💂</div>
+                <div class="drag-item" draggable="true" id="item6" data-target="pl">Wawel Dragon 🐉</div>
+            </div>
+
+            <div class="drop-zones">
+                <div class="zone" id="uk"><h3>🇬🇧 UK</h3></div>
+                <div class="zone" id="pl"><h3>🇵🇱 POLAND</h3></div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button id="check-btn" class="game-btn">Check Results</button>
+                <button id="reset-btn" class="game-btn" style="background: #555;">Reset</button>
+                <h2 id="scoretext" style="margin-top: 20px;"></h2>
+            </div>
+        </div>
+
+    </section>
+</main>
     </div>
 
     <script>
