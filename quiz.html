@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Quizess</title>
+    <title>Quizzes</title>
     <link rel="stylesheet" href="css/video.css">
-     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
+    <link rel="stylesheet" href="quiz.css">
+    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
     <div class="wrapper">
@@ -24,26 +25,38 @@
         </header>
 
         <main class="hero container">
-            <div class="builds" style="display: flex; justify-content: center; padding: 40px 0;">
-                <div class="build" style="max-width: 900px; width: 100%; background: rgba(0,0,0,0.4); border-radius: 25px; padding: 40px;">
+            <div class="quiz-layout-wrapper">
+                <div class="quiz-card-container">
                     
                     <div id="quiz-selection">
-                        <h2 style="font-size: 2.2rem; margin-bottom: 40px; color: #3498db;">Select Your Challenge</h2>
+                        <h2 class="selection-title">Select Your Challenge</h2>
                         <div class="quiz-menu">
-                            <div class="menu-card" onclick="startQuiz('general')"><h3>🌍 General</h3><p>20 Questions</p></div>
-                            <div class="menu-card" style="border-color: #9b59b6;" onclick="startQuiz('folklore')"><h3>🐉 Folklore</h3><p>20 Questions</p></div>
-                            <div class="menu-card" style="border-color: #2ecc71;" onclick="startQuiz('landmarks')"><h3>🏰 Landmarks</h3><p>20 Questions</p></div>
-                            <div class="menu-card" style="border-color: #f1c40f;" onclick="startQuiz('history')"><h3>⏳ History</h3><p>20 Questions</p></div>
+                            <div class="menu-card card-general" onclick="startQuiz('general')">
+                                <h3>🌍 General</h3>
+                                <p>20 Questions</p>
+                            </div>
+                            <div class="menu-card card-folklore" onclick="startQuiz('folklore')">
+                                <h3>🐉 Folklore</h3>
+                                <p>20 Questions</p>
+                            </div>
+                            <div class="menu-card card-landmarks" onclick="startQuiz('landmarks')">
+                                <h3>🏰 Landmarks</h3>
+                                <p>20 Questions</p>
+                            </div>
+                            <div class="menu-card card-history" onclick="startQuiz('history')">
+                                <h3>⏳ History</h3>
+                                <p>20 Questions</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="quiz-game" style="display: none;">
+                    <div id="quiz-game" class="game-engine">
                         <div class="progress-container">
                             <div id="progress-bar" class="progress-fill"></div>
                         </div>
 
-                        <button style="background:none; border:1px solid #555; color:#ccc; cursor:pointer; padding:5px 10px; border-radius:10px; margin-bottom: 15px;" onclick="location.reload()">← Back</button>
-                        <div id="progress" style="margin-bottom: 10px; opacity: 0.6; font-size: 0.9rem;"></div>
+                        <button class="btn-back" onclick="location.reload()">← Back</button>
+                        <div id="progress" class="question-counter"></div>
                         <h2 id="question"></h2>
                         <div id="options" class="options-grid"></div>
                         <div id="result-text"></div>
@@ -55,7 +68,6 @@
     </div>
 
     <script>
-        // БАЗА ДАННЫХ (оставил по несколько для примера, вставь свои 20)
         const allQuizzes = {
             general: [
                 { q: "What do British people typically add to their tea?", a: ["Lemon", "Milk", "Salt", "Honey"], correct: 1 },
@@ -157,19 +169,17 @@
             score = 0;
             document.getElementById("quiz-selection").style.display = "none";
             document.getElementById("quiz-game").style.display = "block";
-            updateProgressBar(); // Обнуляем полоску в начале
+            updateProgressBar(); 
             loadQuestion();
         }
 
-        // ОБНОВЛЕНИЕ ПОЛОСКИ ПРОГРЕССА
         function updateProgressBar() {
-            // Вычисляем процент: (текущий вопрос / общее кол-во) * 100
             const percent = (currentQ / currentQuestions.length) * 100;
             document.getElementById("progress-bar").style.width = percent + "%";
         }
 
         function loadQuestion() {
-            updateProgressBar(); // Обновляем полоску при каждом новом вопросе
+            updateProgressBar();
             const qData = currentQuestions[currentQ];
             document.getElementById("progress").innerText = `Question ${currentQ + 1} of ${currentQuestions.length}`;
             document.getElementById("question").innerText = qData.q;
@@ -195,11 +205,11 @@
 
             if(index === correct) {
                 res.innerText = "Correct! ✨";
-                res.style.color = "#2ecc71";
+                res.className = "result-correct";
                 score++;
             } else {
                 res.innerText = "Wrong! Answer: " + currentQuestions[currentQ].a[correct];
-                res.style.color = "#e74c3c";
+                res.className = "result-wrong";
             }
             document.getElementById("next-btn").style.display = "inline-block";
         }
@@ -209,15 +219,14 @@
             if(currentQ < currentQuestions.length) {
                 loadQuestion();
             } else {
-                // В конце заполняем полоску на 100%
                 document.getElementById("progress-bar").style.width = "100%";
                 
                 const finalPercent = Math.round((score / currentQuestions.length) * 100);
                 let rank = finalPercent > 80 ? "Culture Master! 🏆" : "Well Done! 👍";
                 
                 document.getElementById("quiz-game").innerHTML = 
-                    `<h2 style="font-size: 2.5rem; color: #3498db;">${rank}</h2>` +
-                    `<p style="font-size: 1.5rem; margin: 20px 0;">Score: ${score} / ${currentQuestions.length} (${finalPercent}%)</p>` +
+                    `<h2 class="final-rank">${rank}</h2>` +
+                    `<p class="final-score">Score: ${score} / ${currentQuestions.length} (${finalPercent}%)</p>` +
                     `<button class="next-btn" style="display:block; margin: 0 auto;" onclick="location.reload()">Back to Menu</button>`;
             }
         }
