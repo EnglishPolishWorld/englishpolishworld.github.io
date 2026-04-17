@@ -16,6 +16,27 @@
         .zone.hover { border-color: #fff; background: rgba(255,255,255,0.15); }
         .zone h3 { margin-bottom: 10px; pointer-events: none; }
         .correct { background: #4caf50 !important; color: white !important; }
+        /* Кнопки управления */
+.game-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0 10px;
+}
+.game-btn:hover { background: #0056b3; }
+
+/* Подсветка результатов */
+.correct-answer { background: #28a745 !important; color: white !important; border: 2px solid #fff; }
+.wrong-answer { background: #dc3545 !important; color: white !important; border: 2px solid #fff; }
+
+/* Зона, когда в ней есть предметы */
+.zone { min-height: 200px; padding-bottom: 20px; }
     </style>
 </head>
 
@@ -37,64 +58,158 @@
 
         <main class="container">
             <section class="game-section">
-                <h1>Sort the Symbols</h1>
-                <p>Drag the items to their home country!</p>
+    <h1>Country Sorter</h1>
+    <p>Drag all items to the boxes, then click "Check Results"!</p>
 
-                <div class="draggables" id="items-box">
-                    <div class="drag-item" draggable="true" id="item1" data-target="uk">Big Ben 🕰️</div>
-                    <div class="drag-item" draggable="true" id="item2" data-target="pl">Pierogi 🥟</div>
-                    <div class="drag-item" draggable="true" id="item3" data-target="uk">Double Decker 🚌</div>
-                    <div class="drag-item" draggable="true" id="item4" data-target="pl">Żubr 🦬</div>
-                    <div class="drag-item" draggable="true" id="item5" data-target="uk">Royal Guard 💂</div>
-                </div>
+    <div class="draggables" id="items-box">
+        <div class="drag-item" draggable="true" id="item1" data-target="uk">Big Ben 🕰️</div>
+        <div class="drag-item" draggable="true" id="item2" data-target="pl">Pierogi 🥟</div>
+        <div class="drag-item" draggable="true" id="item3" data-target="uk">Double Decker 🚌</div>
+        <div class="drag-item" draggable="true" id="item4" data-target="pl">Żubr 🦬</div>
+        <div class="drag-item" draggable="true" id="item5" data-target="uk">Royal Guard 💂</div>
+        <div class="drag-item" draggable="true" id="item6" data-target="pl">Wawel Dragon 🐉</div>
+    </div>
 
-                <div class="drop-zones">
-                    <div class="zone" id="uk">
-                        <h3>🇬🇧 UK</h3>
-                    </div>
-                    <div class="zone" id="pl">
-                        <h3>🇵🇱 Poland</h3>
-                    </div>
-                </div>
-            </section>
+    <div class="drop-zones">
+        <div class="zone" id="uk">
+            <h3>🇬🇧 UK</h3>
+        </div>
+        <div class="zone" id="pl">
+            <h3>🇵🇱 POLAND</h3>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <button id="check-btn" class="game-btn">Check Results</button>
+        <button id="reset-btn" class="game-btn" style="background: #555;">Reset</button>
+        <h2 id="scoretext" style="margin-top: 20px;"></h2>
+    </div>
+</section>
         </main>
     </div>
 
-    <script>
-        const items = document.querySelectorAll('.drag-item');
-        const zones = document.querySelectorAll('.zone');
+   <script>
+    const items = document.querySelectorAll('.drag-item');
+    const zones = document.querySelectorAll('.zone');
+    const checkBtn = document.getElementById('check-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const scoreDisplay = document.getElementById('scoretext');
+
+    // Логика перетаскивания
+    items.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text', e.target.id);
+        });
+    });
+
+    zones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => e.preventDefault());
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text');
+            const draggable = document.getElementById(id);
+            zone.appendChild(draggable); // Просто добавляем в зону, не проверяя
+        });
+    });
+
+    // Кнопка проверки
+    checkBtn.onclick = function() {
+        let score = 0;
+        let total = items.length;
 
         items.forEach(item => {
-            item.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text', e.target.id);
-            });
-        });
-
-        zones.forEach(zone => {
-            zone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                zone.classList.add('hover');
-            });
-
-            zone.addEventListener('dragleave', () => {
-                zone.classList.remove('hover');
-            });
-
-            zone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                zone.classList.remove('hover');
-                const id = e.dataTransfer.getData('text');
-                const draggable = document.getElementById(id);
-                
-                if (draggable.dataset.target === zone.id) {
-                    zone.appendChild(draggable);
-                    draggable.classList.add('correct');
-                    draggable.setAttribute('draggable', 'false');
+            const parentZone = item.parentElement;
+            
+            // Проверяем, находится ли предмет в зоне вообще
+            if (parentZone.classList.contains('zone')) {
+                if (item.dataset.target === parentZone.id) {
+                    item.classList.add('correct-answer');
+                    item.classList.remove('wrong-answer');
+                    score++;
                 } else {
-                    alert('Wrong place! Try again.');
+                    item.classList.add('wrong-answer');
+                    item.classList.remove('correct-answer');
                 }
-            });
+            }
         });
-    </script>
+
+        scoreDisplay.innerText = `Your Score: ${score} / ${total}`;
+        if(score === total) {
+            scoreDisplay.innerText += " - Perfect! 🏆";
+        }
+    };
+
+    // Кнопка сброса (возвращает всё в начало)
+    resetBtn.onclick = function() {
+        const box = document.getElementById('items-box');
+        items.forEach(item => {
+            item.classList.remove('correct-answer', 'wrong-answer');
+            item.setAttribute('draggable', 'true');
+            box.appendChild(item);
+        });
+        scoreDisplay.innerText = "";
+    };
+</script><script>
+    const items = document.querySelectorAll('.drag-item');
+    const zones = document.querySelectorAll('.zone');
+    const checkBtn = document.getElementById('check-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const scoreDisplay = document.getElementById('scoretext');
+
+    // Логика перетаскивания
+    items.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text', e.target.id);
+        });
+    });
+
+    zones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => e.preventDefault());
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text');
+            const draggable = document.getElementById(id);
+            zone.appendChild(draggable); // Просто добавляем в зону, не проверяя
+        });
+    });
+
+    // Кнопка проверки
+    checkBtn.onclick = function() {
+        let score = 0;
+        let total = items.length;
+
+        items.forEach(item => {
+            const parentZone = item.parentElement;
+            
+            // Проверяем, находится ли предмет в зоне вообще
+            if (parentZone.classList.contains('zone')) {
+                if (item.dataset.target === parentZone.id) {
+                    item.classList.add('correct-answer');
+                    item.classList.remove('wrong-answer');
+                    score++;
+                } else {
+                    item.classList.add('wrong-answer');
+                    item.classList.remove('correct-answer');
+                }
+            }
+        });
+
+        scoreDisplay.innerText = `Your Score: ${score} / ${total}`;
+        if(score === total) {
+            scoreDisplay.innerText += " - Perfect! 🏆";
+        }
+    };
+
+    // Кнопка сброса (возвращает всё в начало)
+    resetBtn.onclick = function() {
+        const box = document.getElementById('items-box');
+        items.forEach(item => {
+            item.classList.remove('correct-answer', 'wrong-answer');
+            item.setAttribute('draggable', 'true');
+            box.appendChild(item);
+        });
+        scoreDisplay.innerText = "";
+    };
+</script>
 </body>
 </html>
