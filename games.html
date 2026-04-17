@@ -7,7 +7,7 @@
     <title>Mini Games</title>
     
     <link rel="stylesheet" href="css/video.css"> 
-       <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 
 <body>
@@ -30,7 +30,7 @@
             <section class="game-section">
                 
                 <div id="game-lobby-screen">
-                    <h1 class="lobby-title" style="margin-bottom: 50px;">Select the game</h1>
+                    <h1 class="lobby-title">Select the game</h1>
                  
                     <div class="game-selection-wrapper">
                         <div class="ui-game-card" onclick="initiateSortingGame()">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <div id="sorting-game-engine">
+                <div id="sorting-game-engine" style="display: none; opacity: 0;">
                     <button onclick="returnToLobby()" class="action-button btn-reset">← Back to Menu</button>
                     <h1>🧩 Sorting Master</h1>
 
@@ -60,7 +60,7 @@
                         <div class="drag-item" draggable="true" id="node-12" data-target="uk">Sherlock Holmes 🕵️</div>
                         <div class="drag-item" draggable="true" id="node-13" data-target="uk">Stonehenge 🏛️</div>
                         <div class="drag-item" draggable="true" id="node-14" data-target="pl">Zapiekanka 🥖</div>
-                        <div class="drag-item" draggable="true" id="node-15" data-target="pl">Fryderyk Chopin 🎹</div>
+                        <div class="drag-item" draggable="true" id="node-15" data-target="pl">Fryderyк Chopin 🎹</div>
                         <div class="drag-item" draggable="true" id="node-16" data-target="pl">Amber 💎</div>
                     </div>
 
@@ -69,7 +69,7 @@
                         <div class="culture-bin" id="pl"><h3>🇵🇱 POLAND</h3></div>
                     </div>
 
-                    <div style="margin-top: 40px;">
+                    <div class="game-controls">
                         <button id="final-validation-btn" class="action-button btn-check">Check Results</button>
                         <button id="system-reset-btn" class="action-button btn-reset">Clear Board</button>
                         <div id="visual-score-output" class="result-score-display"></div>
@@ -112,6 +112,7 @@
                 event.dataTransfer.setData('text', event.target.id);
             });
 
+            // Поддержка Touch для мобилок
             node.addEventListener('touchstart', function(event) {
                 window.activeDraggingNode = this;
                 this.style.opacity = '0.7';
@@ -129,7 +130,9 @@
                 window.activeDraggingNode = null;
             });
 
-            node.addEventListener('touchmove', (e) => { if(window.activeDraggingNode) e.preventDefault(); }, {passive: false});
+            node.addEventListener('touchmove', (e) => { 
+                if(window.activeDraggingNode) e.preventDefault(); 
+            }, {passive: false});
         });
 
         dropContainers.forEach(container => {
