@@ -265,3 +265,62 @@
     height: 4px;
     box-shadow: 0 -5px 15px currentColor;
 }
+/* --- ЭФФЕКТЫ РЕДКОСТЕЙ --- */
+
+/* 1. Анимированный градиент для Вселенной */
+.rarity-universe {
+    background: linear-gradient(135deg, #1a0033, #4b0082, #00008b, #4b0082, #1a0033) !important;
+    background-size: 400% 400% !important;
+    animation: universeShift 8s ease infinite !important;
+    border: 2px solid #00ffff !important;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255, 0, 255, 0.3) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Эффект мерцающих звезд внутри карточки Вселенной */
+.rarity-universe::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(white, rgba(255,255,255,0.2) 2px, transparent 40px);
+    background-size: 50px 50px;
+    opacity: 0.3;
+}
+
+@keyframes universeShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 2. Золотая Легендарная редкость */
+.rarity-legendary {
+    background: linear-gradient(145deg, rgba(40, 40, 10, 0.8), rgba(20, 20, 5, 0.9)) !important;
+    border: 2px solid #ffcc00 !important;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.5) !important;
+    animation: goldGlow 3s infinite alternate;
+}
+
+@keyframes goldGlow {
+    from { box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); }
+    to { box-shadow: 0 0 25px rgba(255, 204, 0, 0.7); }
+}
+
+/* 3. Дополнительные правки для элементов рулетки */
+.reel-item-horizontal.rarity-universe {
+    width: 120px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin: 0 3px;
+}
+
+/* Исправляем отображение текста в инвентаре для Вселенной */
+.rarity-universe strong, .rarity-universe small {
+    color: #ffffff !important;
+    text-shadow: 0 0 5px #00ffff;
+}
