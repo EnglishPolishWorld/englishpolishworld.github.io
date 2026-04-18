@@ -20,13 +20,6 @@
     margin-top: 20px;
 }
 
-/* Фикс для ссылок, чтобы они стояли в ряд */
-.game-selection-wrapper a {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-}
-
 .ui-game-card {
     background: rgba(255, 255, 255, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -36,9 +29,6 @@
     transition: 0.3s;
     cursor: pointer;
     margin: 0 !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 .ui-game-card:hover {
@@ -47,39 +37,27 @@
     background: rgba(255, 255, 255, 0.12);
 }
 
-/* --- НЕОНОВЫЙ СЧЕТЧИК (СТАТИСТИКА) --- */
+/* --- УЛУЧШЕННЫЙ ИГРОВОЙ ТЕКСТ (СТАТИСТИКА) --- */
 .result-score-display {
     font-family: 'Arial Black', Gadget, sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #ffcc00;
-    text-shadow: 2px 2px 0px #000;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 12px 30px;
+    text-shadow: 2px 2px 0px #000, 0px 0px 10px rgba(255, 204, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 25px;
     border-radius: 50px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     display: inline-block;
     margin-top: 20px;
 }
 
-/* Эффект неонового свечения для цифр */
 .result-score-display span {
     color: #fff;
-    text-shadow: 
-        0 0 5px #fff,
-        0 0 10px #ff0055,
-        0 0 20px #ff0055,
-        0 0 40px #ff0055;
-    animation: neon-pulse 1.5s infinite alternate;
-    margin: 0 5px;
+    text-shadow: 2px 2px 0px #ff0055; /* Розовый акцент на цифрах */
 }
 
-@keyframes neon-pulse {
-    from { opacity: 0.8; }
-    to { opacity: 1; text-shadow: 0 0 8px #fff, 0 0 15px #ff0055, 0 0 25px #ff0055, 0 0 50px #ff0055; }
-}
-
-/* --- СТИЛИ ДЛЯ MEMORY MATCH --- */
+/* --- СТИЛИ ДЛЯ MEMORY MATCH (КАРТОЧКИ ПАРЫ) --- */
 .game-board {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -214,7 +192,9 @@
 .btn-reset { background-color: #6c757d; }
 .btn-check { background-color: #28a745; }
 
+/* Адаптация под мобильные устройства */
 @media (max-width: 700px) {
     .target-drop-zones { flex-direction: column; align-items: center; }
     .game-board { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+}
 }
