@@ -11,20 +11,36 @@
 }
 
 /* --- ЛОББИ --- */
-.game-lobby-container {
-    display: block;
-    transition: all 0.5s ease;
+/* Контейнер для карточек игр */
+.game-selection-wrapper {
+    display: flex;             /* Включает режим Flexbox */
+    flex-direction: row;       /* Выстраивает элементы в горизонтальный ряд */
+    justify-content: center;    /* Центрирует карточки по горизонтали */
+    align-items: stretch;      /* Растягивает карточки до одинаковой высоты */
+    gap: 30px;                 /* Устанавливает расстояние между карточками */
+    flex-wrap: wrap;           /* Позволяет карточкам переноситься на новую строку на мобильных устройствах */
+    margin-top: 40px;
 }
 
+/* Настройка ссылок-оберток */
+.game-selection-wrapper a {
+    text-decoration: none;
+    display: flex;             /* Чтобы ссылка принимала высоту содержимого */
+}
+
+/* Сами карточки */
 .ui-game-card {
     background: rgba(255, 255, 255, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 25px;
     padding: 40px;
-    width: 280px;
-    margin: 0 auto;
+    width: 300px;              /* Фиксированная ширина для аккуратного вида */
     transition: 0.3s;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;    /* Внутренние элементы карточки (текст, кнопка) в колонку */
+    justify-content: space-between; /* Распределяет контент (кнопка всегда внизу) */
+    text-align: center;
 }
 
 .ui-game-card:hover {
