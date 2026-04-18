@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/games.css">
     <link rel="stylesheet" href="css/video.css">
-    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
     <style>
-        /* Это исправит пустую страницу: делаем движок видимым */
+        /* ГЛАВНОЕ ИСПРАВЛЕНИЕ: Перебиваем display: none из games.css */
         #sorting-game-engine {
-            display: block !important;
-            opacity: 1 !important;
-            padding-top: 20px;
+            display: flex !important; /* Делаем видимым */
+            flex-direction: column;
+            align-items: center;
+            opacity: 1 !important;    /* Убираем прозрачность */
+            visibility: visible !important;
+            padding: 20px;
         }
+        
         body {
-            background: transparent;
-            overflow-x: hidden;
+            background: transparent; /* Чтобы было видно фон главного сайта */
+            margin: 0;
         }
     </style>
 </head>
@@ -30,7 +33,7 @@
             <div class="drag-item" draggable="true" id="node-4" data-target="pl">Żubr 🐂</div>
             <div class="drag-item" draggable="true" id="node-5" data-target="uk">Royal Guard 💂</div>
             <div class="drag-item" draggable="true" id="node-6" data-target="pl">Wawel Dragon 🐉</div>
-            <div class="drag-item" draggable="true" id="node-7" data-target="uk">Red Telephone Box ☎️</div>
+            <div class="drag-item" draggable="true" id="node-7" data-target="uk">Red Phone Box ☎️</div>
             <div class="drag-item" draggable="true" id="node-10" data-target="pl">Oscypek 🧀</div>
             <div class="drag-item" draggable="true" id="node-11" data-target="pl">Syrenka 🧜‍♀️</div>
             <div class="drag-item" draggable="true" id="node-16" data-target="pl">Amber 💎</div>
@@ -53,6 +56,7 @@
         const dropContainers = document.querySelectorAll('.culture-bin');
         const mainVault = document.getElementById('global-items-container');
 
+        // Перемешивание элементов
         (function scramble() {
             const fragments = Array.from(mainVault.children);
             for (let i = fragments.length - 1; i > 0; i--) {
@@ -61,12 +65,16 @@
             }
         })();
 
+        // Drag & Drop логика
         allGameNodes.forEach(node => {
-            node.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', e.target.id));
+            node.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.id);
+            });
             
+            // Поддержка мобильных
             node.addEventListener('touchstart', function(e) {
                 window.activeDraggingNode = this;
-                this.style.opacity = '0.7';
+                this.style.opacity = '0.5';
             }, {passive: true});
 
             node.addEventListener('touchend', function(e) {
@@ -78,20 +86,16 @@
         });
 
         dropContainers.forEach(container => {
-            container.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                container.classList.add('drag-over-active');
-            });
-            container.addEventListener('dragleave', () => container.classList.remove('drag-over-active'));
+            container.addEventListener('dragover', (e) => e.preventDefault());
             container.addEventListener('drop', (e) => {
                 e.preventDefault();
-                container.classList.remove('drag-over-active');
                 const id = e.dataTransfer.getData('text');
                 const element = document.getElementById(id);
-                if(element) container.appendChild(element);
+                if (element) container.appendChild(element);
             });
         });
 
+        // Кнопка проверки
         document.getElementById('final-validation-btn').onclick = function() {
             let score = 0;
             allGameNodes.forEach(node => {
@@ -108,6 +112,7 @@
             document.getElementById('visual-score-output').innerText = "Final Score: " + score + " / " + allGameNodes.length;
         };
 
+        // Кнопка сброса
         document.getElementById('system-reset-btn').onclick = function() {
             allGameNodes.forEach(node => {
                 node.classList.remove('status-correct', 'status-wrong');
