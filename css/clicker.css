@@ -3,212 +3,222 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 40px 20px;
+    background: radial-gradient(circle, rgba(0, 237, 154, 0.05) 0%, transparent 70%);
 }
 
 .main-coin {
-    font-size: 8rem;
+    font-size: 10rem;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.1s;
-    filter: drop-shadow(0 0 25px rgba(0, 237, 154, 0.4));
-    margin: 30px 0;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 0 30px rgba(0, 237, 154, 0.3));
+    margin: 40px 0;
+    display: inline-block;
+}
+
+.main-coin:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 50px rgba(0, 237, 154, 0.6));
 }
 
 .main-coin:active {
-    transform: scale(0.85);
+    transform: scale(0.9) rotate(-5deg);
 }
 
 /* --- ИНВЕНТАРЬ --- */
 .inventory-section {
     width: 100%;
-    max-width: 700px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 25px;
-    border: 1px solid rgba(0, 237, 154, 0.2);
+    max-width: 850px;
+    background: rgba(20, 20, 20, 0.6);
+    border-radius: 24px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .item-card {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    padding: 15px;
-    border: 1px solid #333;
+    background: linear-gradient(145deg, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.8));
+    border-radius: 16px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     text-align: center;
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    background: rgba(50, 50, 50, 0.9);
+    border-color: currentColor; /* Подсветит цветом редкости */
 }
 
 .item-emoji {
-    font-size: 2rem;
-    display: block;
-    margin-bottom: 5px;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
 }
 
 .btn-sell {
-    background: #e74c3c;
+    background: linear-gradient(to bottom, #ff4757, #c0392b);
     color: white;
     border: none;
-    padding: 4px 12px;
-    border-radius: 5px;
+    padding: 6px 15px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-top: 8px;
-    font-size: 0.8rem;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    width: 100%;
+    transition: 0.2s;
+}
+
+.btn-sell:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
 }
 
 /* --- КАЗИНО И РУЛЕТКА (CS-STYLE) --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
 }
 
 .casino-content {
-    background: #111;
-    border: 2px solid #ffcc00;
-    border-radius: 25px;
+    background: #0f0f0f;
+    border: 2px solid rgba(255, 204, 0, 0.3);
+    border-radius: 30px;
     padding: 40px;
-    max-width: 700px;
+    max-width: 800px;
     width: 95%;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 204, 0, 0.1);
 }
 
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 140px;
-    background: #000;
-    border: 2px solid #333;
+    height: 160px;
+    background: #050505;
+    border: 1px solid #222;
     overflow: hidden;
-    margin: 20px 0;
-    border-radius: 10px;
+    margin: 30px 0;
+    border-radius: 15px;
     display: flex;
     align-items: center;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
 }
 
-/* Золотая линия по центру */
 .selector {
     position: absolute;
     left: 50%;
     top: 0;
-    width: 3px;
+    width: 4px;
     height: 100%;
     background: #ffcc00;
     z-index: 10;
-    box-shadow: 0 0 15px #ffcc00;
+    box-shadow: 0 0 20px #ffcc00;
     transform: translateX(-50%);
 }
 
-.reel-horizontal {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    will-change: transform;
-}
-
 .reel-item-horizontal {
-    min-width: 120px;
-    max-width: 120px;
-    height: 120px;
+    min-width: 130px;
+    height: 130px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    background: #222;
-    margin-right: 6px;
-    border-radius: 6px;
-    flex-shrink: 0;
-    border-bottom: 4px solid #444; /* Цвет редкости */
+    font-size: 3rem;
+    background: rgba(255,255,255,0.03);
+    margin: 0 4px;
+    border-radius: 12px;
+    border-bottom: 5px solid #444;
+    transition: 0.3s;
 }
 
 /* --- СЕТКА КЕЙСОВ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    max-height: 350px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    max-height: 400px;
     overflow-y: auto;
-    padding: 10px;
+    padding: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #ffcc00 #111;
 }
 
 .case-card {
-    background: linear-gradient(145deg, #2a2a2a, #111);
-    border: 1px solid #3d3d3d;
-    border-radius: 10px;
-    padding: 15px;
+    background: linear-gradient(180deg, #1e1e1e 0%, #111 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 20px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .case-card:hover {
-    transform: translateY(-4px);
+    transform: scale(1.05);
     border-color: #ffcc00;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    background: #1a1a1a;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
-.case-icon { font-size: 2.2rem; margin-bottom: 8px; display: block; }
-.case-name { font-weight: bold; color: #fff; font-size: 0.85rem; display: block; }
-.case-price { color: #00ed9a; font-size: 0.8rem; font-weight: bold; }
+.case-icon { 
+    font-size: 2.5rem; 
+    margin-bottom: 10px; 
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(255,204,0,0.2));
+}
+
+.case-name { font-weight: 800; color: #eee; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+.case-price { color: #00ed9a; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: block; }
 
 .close-btn {
     position: absolute;
-    top: 15px; right: 15px;
-    background: none; border: none; color: #555;
-    font-size: 1.8rem; cursor: pointer;
+    top: 20px; right: 25px;
+    background: rgba(255,255,255,0.05); 
+    border: none; 
+    color: #888;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem; 
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-/* --- ЭФФЕКТЫ ПРИ ВЫПАДЕНИИ И ПРОИГРЫШЕ --- */
+.close-btn:hover { background: #ff4757; color: white; }
 
-/* Эффект вспышки при выигрыше */
+/* АНИМАЦИИ */
 .win-flash {
-    animation: flash-animation 0.6s ease-out;
+    animation: win-pulse 0.8s ease-out;
 }
 
-@keyframes flash-animation {
-    0% { background-color: rgba(255, 255, 255, 0.4); }
-    100% { background-color: transparent; }
+@keyframes win-pulse {
+    0% { box-shadow: 0 0 0 0px rgba(255, 204, 0, 0.7); }
+    100% { box-shadow: 0 0 0 40px rgba(255, 204, 0, 0); }
 }
 
-/* Эффект тряски при проигрыше */
-.shake {
-    animation: shake-animation 0.4s cubic-bezier(.36,.07,.19,.97) both;
-}
-
-@keyframes shake-animation {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    20%, 80% { transform: translate3d(2px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
-}
-
-/* Текст BIG WIN */
-.big-win-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #ffcc00;
-    font-size: 4rem;
-    font-weight: 900;
+#casino-msg {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    text-shadow: 0 0 20px #ffaa00, 2px 2px 0 #000;
-    z-index: 100;
-    pointer-events: none;
-    display: none;
-    white-space: nowrap;
 }
