@@ -90,10 +90,10 @@ body {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 15px; /* Уменьшено с 30px */
-    max-width: 800px;
+    padding: 20px; /* Чуть больше воздуха */
+    max-width: 850px;
     width: 95%;
-    max-height: 96vh; /* Ограничение по высоте экрана */
+    max-height: 97vh; 
     text-align: center;
     position: relative;
     box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
@@ -106,11 +106,11 @@ body {
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 100px; /* Уменьшено со 140px */
+    height: 120px; /* Среднее значение между твоим и прошлым */
     background: #050505;
     border: 2px solid #222;
     overflow: hidden;
-    margin: 10px 0; /* Уменьшено с 20px */
+    margin: 15px 0;
     border-radius: 12px;
     flex-shrink: 0;
 }
@@ -135,13 +135,13 @@ body {
 }
 
 .reel-item-horizontal {
-    min-width: 90px; /* Уменьшено со 120px */
-    max-width: 90px;
-    height: 90px; /* Уменьшено со 120px */
+    min-width: 105px; /* Увеличено для лучшей видимости */
+    max-width: 105px;
+    height: 105px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.2rem; /* Уменьшено с 2.8rem */
+    font-size: 2.5rem;
     background: #1a1a1a;
     margin: 0 3px;
     border-radius: 8px;
@@ -152,11 +152,11 @@ body {
 /* --- СЕТКА КЕЙСОВ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Уменьшено со 160px */
-    gap: 10px; /* Уменьшено с 15px */
-    max-height: 300px; /* Уменьшено с 380px */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    gap: 12px;
+    max-height: 340px; /* Увеличено рабочее пространство */
     overflow-y: auto;
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
     background: rgba(0,0,0,0.2);
     border-radius: 15px;
@@ -167,7 +167,7 @@ body {
     background: linear-gradient(145deg, #222, #111);
     border: 1px solid #333;
     border-radius: 12px;
-    padding: 10px; /* Уменьшено с 15px */
+    padding: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -178,9 +178,9 @@ body {
     background: #2a2a2a;
 }
 
-.case-icon { font-size: 2rem; display: block; margin-bottom: 4px; }
-.case-name { font-weight: bold; color: #eee; display: block; margin-bottom: 2px; font-size: 0.9rem; }
-.case-price { color: #00ed9a; font-weight: bold; font-size: 0.85rem; }
+.case-icon { font-size: 2.2rem; display: block; margin-bottom: 6px; }
+.case-name { font-weight: bold; color: #eee; display: block; margin-bottom: 4px; font-size: 0.95rem; }
+.case-price { color: #00ed9a; font-weight: bold; font-size: 0.9rem; }
 
 /* --- РЕДКОСТИ (ЦВЕТА) --- */
 .rarity-common { border-bottom-color: #26de81 !important; }
@@ -211,28 +211,28 @@ body {
 }
 
 /* СКРОЛЛБАР */
-.case-grid::-webkit-scrollbar { width: 5px; }
+.case-grid::-webkit-scrollbar { width: 6px; }
 .case-grid::-webkit-scrollbar-track { background: transparent; }
 .case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 .case-grid::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
 
 .close-btn {
     position: absolute;
-    top: 10px; right: 15px;
+    top: 15px; right: 20px;
     background: none; border: none;
-    color: #666; font-size: 1.8rem;
+    color: #666; font-size: 2rem;
     cursor: pointer;
 }
 
-/* --- СТИЛИ ДЛЯ МУЛЬТИКЕЙСОВ --- */
+/* --- МУЛЬТИКЕЙСЫ --- */
 .multi-open-selector {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 10px;
+    margin-bottom: 15px;
     background: rgba(255, 255, 255, 0.05);
-    padding: 8px;
+    padding: 10px;
     border-radius: 12px;
 }
 
@@ -240,10 +240,11 @@ body {
     background: #1a1a1a;
     border: 1px solid #333;
     color: #eee;
-    padding: 4px 12px;
+    padding: 6px 15px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .multi-btn.active {
@@ -252,41 +253,40 @@ body {
     border-color: #fff;
 }
 
-/* --- СТИЛИ ПРЕДПРОСМОТРА ПРЕДМЕТОВ --- */
+/* --- ПРЕДПРОСМОТР ПРЕДМЕТОВ --- */
 .case-content-preview {
-    margin-top: 10px;
-    padding-top: 8px;
+    margin-top: 15px;
+    padding-top: 10px;
     border-top: 1px solid #222;
 }
 
 .preview-title {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #666;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .items-preview-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .preview-item {
-    width: 32px;
-    height: 32px;
-    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
     background: #050505;
     border: 1px solid #222;
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 2px solid #444;
+    border-bottom: 3px solid #444;
 }
 
 .cases-title {
     color: #ffcc00;
     margin: 0 0 10px 0;
-    font-size: 1.2rem;
 }
