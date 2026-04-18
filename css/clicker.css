@@ -42,13 +42,7 @@
     padding: 15px;
     border: 1px solid #333;
     text-align: center;
-    transition: box-shadow 0.3s ease;
-}
-
-.item-emoji {
-    font-size: 2rem;
-    display: block;
-    margin-bottom: 5px;
+    transition: all 0.3s ease;
 }
 
 .btn-sell {
@@ -63,7 +57,7 @@
     font-weight: bold;
 }
 
-/* --- КАЗИНО И РУЛЕТКА (CS-STYLE) --- */
+/* --- КАЗИНО И РУЛЕТКА --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -80,28 +74,24 @@
     border: 2px solid #ffcc00;
     border-radius: 25px;
     padding: 40px;
-    max-width: 700px;
+    max-width: 750px;
     width: 95%;
     text-align: center;
     position: relative;
     box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
-    font-weight: bold;
 }
 
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 140px;
+    height: 150px;
     background: #000;
     border: 2px solid #333;
     overflow: hidden;
     margin: 20px 0;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
 }
 
-/* Золотая линия по центру */
 .selector {
     position: absolute;
     left: 50%;
@@ -116,176 +106,64 @@
 
 .reel-horizontal {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    height: 100%;
     will-change: transform;
 }
 
 .reel-item-horizontal {
     min-width: 120px;
-    max-width: 120px;
     height: 120px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
     background: #222;
-    margin-right: 6px;
+    margin: 0 3px;
     border-radius: 6px;
     flex-shrink: 0;
-    border-bottom: 4px solid #444; /* Цвет редкости */
+    border-bottom: 4px solid #444; /* Базовый цвет */
+    transition: border-color 0.3s;
 }
 
-/* --- СЕТКА КЕЙСОВ --- */
-.case-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    max-height: 350px;
-    overflow-y: auto;
-    padding: 10px;
-}
+/* --- КЛАССЫ РЕДКОСТЕЙ --- */
 
-.case-card {
-    background: linear-gradient(145deg, #2a2a2a, #111);
-    border: 1px solid #3d3d3d;
-    border-radius: 10px;
-    padding: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-}
+/* Common - Зеленый */
+.rarity-common { border-bottom-color: #26de81 !important; }
+.item-card.rarity-common { box-shadow: inset 0 0 10px rgba(38, 222, 129, 0.1); }
 
-.case-card:hover {
-    transform: translateY(-4px);
-    border-color: #ffcc00;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-}
+/* Rare - Синий */
+.rarity-rare { border-bottom-color: #45aaf2 !important; }
+.item-card.rarity-rare { box-shadow: inset 0 0 10px rgba(69, 170, 242, 0.2); }
 
-.case-icon { font-size: 2.2rem; margin-bottom: 8px; display: block; }
-.case-name { font-weight: bold; color: #fff; font-size: 0.85rem; display: block; }
-.case-price { color: #00ed9a; font-size: 0.8rem; font-weight: bold; }
+/* Epic - Фиолетовый */
+.rarity-epic { border-bottom-color: #a55eea !important; }
+.item-card.rarity-epic { box-shadow: inset 0 0 15px rgba(165, 94, 234, 0.2); }
 
-.close-btn {
-    position: absolute;
-    top: 15px; right: 15px;
-    background: none; border: none; color: #555;
-    font-size: 1.8rem; cursor: pointer;
-}
+/* Mythic - Красный */
+.rarity-mythic { border-bottom-color: #ff4757 !important; }
+.item-card.rarity-mythic { box-shadow: 0 0 10px rgba(255, 71, 87, 0.3); }
 
-/* --- ЭФФЕКТЫ ПРИ ВЫПАДЕНИИ И ПРОИГРЫШЕ --- */
+/* Legendary - Золотой */
+.rarity-legendary { 
+    border-bottom-color: #ffcc00 !important; 
+    animation: goldGlow 3s infinite alternate;
+}
+.item-card.rarity-legendary { border: 1px solid #ffcc00; }
 
-/* Эффект вспышки при выигрыше */
-.win-flash {
-    animation: flash-animation 0.6s ease-out;
-}
-
-@keyframes flash-animation {
-    0% { background-color: rgba(255, 255, 255, 0.4); }
-    100% { background-color: transparent; }
-}
-
-/* Эффект тряски при проигрыше */
-.shake {
-    animation: shake-animation 0.4s cubic-bezier(.36,.07,.19,.97) both;
-}
-
-@keyframes shake-animation {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    20%, 80% { transform: translate3d(2px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
-}
-
-/* Текст BIG WIN */
-.big-win-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #ffcc00;
-    font-size: 4rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    text-shadow: 0 0 20px #ffaa00, 2px 2px 0 #000;
-    z-index: 100;
-    pointer-events: none;
-    display: none;
-    white-space: nowrap;
-}
-/* Настраиваем ширину всей полосы прокрутки */
-.case-grid::-webkit-scrollbar {
-    width: 8px;
-}
-
-/* Фон дорожки, по которой едет ползунок */
-.case-grid::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    margin: 5px;
-}
-
-/* Сам ползунок (бегунок) */
-.case-grid::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #ffcc00, #f39c12); /* Под цвет твоих кейсов */
-    border-radius: 10px;
-    border: 2px solid #111; /* Небольшой отступ, чтобы выглядело аккуратнее */
-}
-
-/* Цвет при наведении */
-.case-grid::-webkit-scrollbar-thumb:hover {
-    background: #ffdb4d;
-}
-
-/* Для Firefox (у него меньше возможностей кастомизации) */
-.case-grid {
-    scrollbar-width: thin;
-    scrollbar-color: #ffcc00 #111;
-}
-/* Цветная полоска и свечение под предметом в рулетке */
-.reel-item-horizontal {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(180deg, #222 0%, #151515 100%);
-}
-
-/* Свечение (тень) снизу иконки */
-.reel-item-horizontal .emoji-display {
-    z-index: 2;
-    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-}
-
-/* Нижний цветовой акцент редкости */
-.rarity-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    box-shadow: 0 -5px 15px currentColor;
-}
-/* --- ЭФФЕКТЫ РЕДКОСТЕЙ --- */
-
-/* 1. Анимированный градиент для Вселенной */
+/* Universe - Космический */
 .rarity-universe {
-    background: linear-gradient(135deg, #1a0033, #4b0082, #00008b, #4b0082, #1a0033) !important;
+    background: linear-gradient(135deg, #1a0033, #4b0082, #00008b) !important;
     background-size: 400% 400% !important;
     animation: universeShift 8s ease infinite !important;
     border: 2px solid #00ffff !important;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255, 0, 255, 0.3) !important;
-    position: relative;
-    overflow: hidden;
+    border-bottom-color: #00ffff !important;
 }
 
-/* Эффект мерцающих звезд внутри карточки Вселенной */
-.rarity-universe::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: radial-gradient(white, rgba(255,255,255,0.2) 2px, transparent 40px);
-    background-size: 50px 50px;
-    opacity: 0.3;
+/* --- АНИМАЦИИ --- */
+@keyframes goldGlow {
+    from { box-shadow: 0 0 5px rgba(255, 204, 0, 0.2); }
+    to { box-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
 }
 
 @keyframes universeShift {
@@ -294,33 +172,24 @@
     100% { background-position: 0% 50%; }
 }
 
-/* 2. Золотая Легендарная редкость */
-.rarity-legendary {
-    background: linear-gradient(145deg, rgba(40, 40, 10, 0.8), rgba(20, 20, 5, 0.9)) !important;
-    border: 2px solid #ffcc00 !important;
-    box-shadow: 0 0 15px rgba(255, 204, 0, 0.5) !important;
-    animation: goldGlow 3s infinite alternate;
+/* Эффекты карточки */
+.win-flash { animation: flash 0.6s ease-out; }
+@keyframes flash {
+    0% { background: rgba(255,255,255,0.5); }
+    100% { background: transparent; }
 }
 
-@keyframes goldGlow {
-    from { box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); }
-    to { box-shadow: 0 0 25px rgba(255, 204, 0, 0.7); }
+.shake { animation: shake 0.4s both; }
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    30%, 70% { transform: translate3d(-4px, 0, 0); }
+    50% { transform: translate3d(4px, 0, 0); }
 }
 
-/* 3. Дополнительные правки для элементов рулетки */
-.reel-item-horizontal.rarity-universe {
-    width: 120px;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    margin: 0 3px;
-}
-
-/* Исправляем отображение текста в инвентаре для Вселенной */
-.rarity-universe strong, .rarity-universe small {
-    color: #ffffff !important;
-    text-shadow: 0 0 5px #00ffff;
+/* Скроллбар */
+.case-grid::-webkit-scrollbar { width: 8px; }
+.case-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+.case-grid::-webkit-scrollbar-thumb { 
+    background: linear-gradient(#ffcc00, #f39c12); 
+    border-radius: 10px; 
 }
