@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Money Tycoon - Pro Balance</title>
+    <title>Money Tycoon - Hardcore Edition</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
     <link rel="stylesheet" href="css/clicker.css">
@@ -37,7 +37,7 @@
                     
                     <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
                         <button class="action-button" onclick="window.location.href='games.html'" style="background: #007bff;">← Back</button>
-                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000;">🎰 Casino</button>
+                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000;">🎰 Open Cases</button>
                     </div>
                 </div>
 
@@ -49,8 +49,10 @@
                 <div id="casino-overlay" class="casino-overlay" style="display: none;">
                     <div class="casino-content">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
-                        <h2 style="color: #ffcc00;">Global Market</h2>
+                        <h2 style="color: #ffcc00;">Top Secret Cases</h2>
                         <div id="slot-machine" class="slot-display">? | ? | ?</div>
+                        <p id="casino-msg">Choose your destiny:</p>
+                        
                         <div class="casino-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <button class="action-button" onclick="spin('common')">📦 Common (150)</button>
                             <button class="action-button" onclick="spin('tech')">💻 Tech (2.5k)</button>
@@ -68,48 +70,47 @@
         let coins = 0;
         let inventory = [];
 
-        // В каждом кейсе по 10 предметов. Шанс на последние (9 и 10) — самый низкий.
         const shopData = {
             common: { cost: 150, items: [
-                {n: "Used Napkin", e: "🧻", p: 10}, {n: "Rusty Key", e: "🔑", p: 60}, {n: "Old Cap", e: "🧢", p: 150}, 
-                {n: "Basic Tee", e: "👕", p: 300}, {n: "Fidget Spinner", e: "🌀", p: 500}, {n: "Silver Coin", e: "🪙", p: 1000},
-                {n: "Rare Comic", e: "📚", p: 2500}, {n: "Sneakers", e: "👟", p: 5000}, {n: "Gold Ring", e: "💍", p: 12000}, 
-                {n: "Diamond Stud", e: "💎", p: 30000}
+                {n: "Used Napkin", e: "🧻", p: 5}, {n: "Rusty Key", e: "🔑", p: 30}, {n: "Old Cap", e: "🧢", p: 80}, 
+                {n: "Basic Tee", e: "👕", p: 150}, {n: "Fidget Spinner", e: "🌀", p: 300}, {n: "Silver Coin", e: "🪙", p: 700},
+                {n: "Rare Comic", e: "📚", p: 1200}, {n: "Sneakers", e: "👟", p: 2500}, {n: "Gold Ring", e: "💍", p: 6000}, 
+                {n: "Diamond", e: "💎", p: 15000}
             ]},
             tech: { cost: 2500, items: [
-                {n: "CD-Rom", e: "💿", p: 150}, {n: "Mouse", e: "🖱️", p: 700}, {n: "Keyboard", e: "⌨️", p: 1500},
-                {n: "Monitor", e: "🖥️", p: 4000}, {n: "Smartphone", e: "📱", p: 9000}, {n: "Graphics Card", e: "📟", p: 25000},
-                {n: "Gaming PC", e: "💻", p: 60000}, {n: "Server Rack", e: "🗄️", p: 150000}, {n: "Microchip", e: "🏮", p: 350000},
-                {n: "AI Core", e: "🤖", p: 800000}
+                {n: "CD-Rom", e: "💿", p: 100}, {n: "Mouse", e: "🖱️", p: 500}, {n: "Keyboard", e: "⌨️", p: 900},
+                {n: "Monitor", e: "🖥️", p: 2500}, {n: "Smartphone", e: "📱", p: 5000}, {n: "Graphics Card", e: "📟", p: 15000},
+                {n: "Gaming PC", e: "💻", p: 40000}, {n: "Server Rack", e: "🗄️", p: 110000}, {n: "Microchip", e: "🏮", p: 280000},
+                {n: "AI Core", e: "🤖", p: 600000}
             ]},
             transport: { cost: 20000, items: [
-                {n: "Skateboard", e: "🛹", p: 3000}, {n: "E-Scooter", e: "🛴", p: 10000}, {n: "Bicycle", e: "🚲", p: 25000},
-                {n: "Motorbike", e: "🏍️", p: 70000}, {n: "Old Sedan", e: "🚗", p: 150000}, {n: "Pickup Truck", e: "🛻", p: 400000},
-                {n: "Luxury SUV", e: "🚙", p: 900000}, {n: "Sports Car", e: "🏎️", p: 2000000}, {n: "Helicopter", e: "🚁", p: 6000000},
-                {n: "Super Yacht", e: "🛥️", p: 15000000}
+                {n: "Skateboard", e: "🛹", p: 2000}, {n: "E-Scooter", e: "🛴", p: 6000}, {n: "Bicycle", e: "🚲", p: 15000},
+                {n: "Motorbike", e: "🏍️", p: 40000}, {n: "Old Sedan", e: "🚗", p: 110000}, {n: "Pickup Truck", e: "🛻", p: 300000},
+                {n: "Luxury SUV", e: "🚙", p: 650000}, {n: "Sports Car", e: "🏎️", p: 1800000}, {n: "Helicopter", e: "🚁", p: 5000000},
+                {n: "Super Yacht", e: "🛥️", p: 12000000}
             ]},
             estate: { cost: 150000, items: [
-                {n: "Tent", e: "⛺", p: 15000}, {n: "Wooden Cabin", e: "🛖", p: 70000}, {n: "Trailer", e: "🚛", p: 200000},
-                {n: "Small House", e: "🏡", p: 600000}, {n: "Penthouse", e: "🏢", p: 1500000}, {n: "Luxury Mansion", e: "🏰", p: 4500000},
-                {n: "Skyscraper", e: "🏙️", p: 12000000}, {n: "Private Port", e: "⚓", p: 35000000}, {n: "Paradise Island", e: "🏝️", p: 100000000},
-                {n: "Ancient Castle", e: "🏰", p: 300000000}
+                {n: "Tent", e: "⛺", p: 12000}, {n: "Wooden Cabin", e: "🛖", p: 60000}, {n: "Trailer", e: "🚛", p: 150000},
+                {n: "Small House", e: "🏡", p: 450000}, {n: "Penthouse", e: "🏢", p: 1100000}, {n: "Luxury Mansion", e: "🏰", p: 3000000},
+                {n: "Skyscraper", e: "🏙️", p: 10000000}, {n: "Private Port", e: "⚓", p: 28000000}, {n: "Paradise Island", e: "🏝️", p: 75000000},
+                {n: "Ancient Ruins", e: "🗿", p: 200000000} // Поменял замок на руины
             ]},
             galactic: { cost: 1200000, items: [
-                {n: "Space Suit", e: "👨‍🚀", p: 120000}, {n: "Satellite", e: "🛰️", p: 600000}, {n: "Space Probe", e: "🚀", p: 2000000},
-                {n: "Mars Rover", e: "🚜", p: 10000000}, {n: "Space Station", e: "🛸", p: 50000000}, {n: "Moon Mine", e: "🌑", p: 200000000},
-                {n: "Mars Dome", e: "🏗️", p: 700000000}, {n: "Starship", e: "🚢", p: 2000000000}, {n: "Solar System", e: "☀️", p: 15000000000},
-                {n: "The Universe", e: "🌌", p: 99999999999}
+                {n: "Space Suit", e: "👨‍🚀", p: 90000}, {n: "Satellite", e: "🛰️", p: 450000}, {n: "Space Probe", e: "🚀", p: 1400000},
+                {n: "Mars Rover", e: "🚜", p: 7000000}, {n: "Space Station", e: "🛸", p: 35000000}, {n: "Moon Mine", e: "🌑", p: 180000000},
+                {n: "Mars Dome", e: "🏗️", p: 550000000}, {n: "Starship", e: "🚢", p: 1900000000}, {n: "Solar System", e: "☀️", p: 4500000000},
+                {n: "The Universe", e: "🌌", p: 77777777777}
             ]}
         };
 
         function save() {
-            localStorage.setItem('tycoon_save_pro', coins);
-            localStorage.setItem('tycoon_save_inv_pro', JSON.stringify(inventory));
+            localStorage.setItem('tycoon_hardcore_v7', coins);
+            localStorage.setItem('tycoon_hardcore_inv_v7', JSON.stringify(inventory));
         }
 
         function load() {
-            const c = localStorage.getItem('tycoon_save_pro');
-            const i = localStorage.getItem('tycoon_save_inv_pro');
+            const c = localStorage.getItem('tycoon_hardcore_v7');
+            const i = localStorage.getItem('tycoon_hardcore_inv_v7');
             if (c) coins = parseInt(c);
             if (i) inventory = JSON.parse(i);
             render();
@@ -139,42 +140,41 @@
 
             coins -= box.cost;
             render();
-            msg.innerText = "Processing...";
+            msg.innerText = "Opening Case...";
             msg.style.color = "#ffcc00";
             slot.innerText = "🌀 | 🌀 | 🌀";
 
             setTimeout(() => {
                 const rand = Math.random() * 100;
                 
-                // 1. ШАНС ПРОИГРЫША (30%)
-                if (rand < 30) {
-                    slot.innerText = "📉 | 📉 | 📉";
-                    msg.innerText = "Market Crash! Investment lost.";
+                // 30% Риск проигрыша (Скрыто)
+                if (rand < 30) { 
+                    slot.innerText = "💨 | 💨 | 💨";
+                    msg.innerText = "Nothing inside. Unlucky!";
                     msg.style.color = "#ff4757";
                 } 
-                // 2. ШАНС ВЫИГРЫША (70%)
                 else {
                     const itemRand = Math.random() * 100;
                     let idx;
                     
-                    // Распределение редкости внутри выигрыша:
-                    if (itemRand > 98) idx = 9;      // 2% - Ультра легендарка
-                    else if (itemRand > 93) idx = 8; // 5% - Легендарка
-                    else if (itemRand > 83) idx = 7; // 10% - Эпик
-                    else if (itemRand > 68) idx = 6; // 15% - Редкое
-                    else if (itemRand > 48) idx = 5; // 20% - Необычное
-                    else if (itemRand > 28) idx = 4; // 20% - Обычное
-                    else idx = Math.floor(Math.random() * 4); // 28% на 4 самых дешевых
+                    // ХАРДКОРНЫЕ ШАНСЫ (Урезаны):
+                    if (itemRand > 99.8) idx = 9;      // 0.2% - Ультра легендарка
+                    else if (itemRand > 98) idx = 8;  // 1.8% - Легендарка
+                    else if (itemRand > 92) idx = 7;  // 6% - Эпик
+                    else if (itemRand > 80) idx = 6;  // 12% - Редкое
+                    else if (itemRand > 60) idx = 5;  // 20% - Необычное
+                    else if (itemRand > 35) idx = 4;  // 25% - Обычное
+                    else idx = Math.floor(Math.random() * 4); // 35% на самый хлам
 
                     const item = box.items[idx];
                     inventory.push(item);
                     slot.innerText = `${item.e} | ${item.e} | ${item.e}`;
-                    msg.innerText = `PROFIT: ${item.n}!`;
+                    msg.innerText = `Loot: ${item.n}!`;
                     msg.style.color = "#00ed9a";
                 }
                 render();
                 save();
-            }, 700);
+            }, 800);
         }
 
         function sell(index) {
