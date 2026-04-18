@@ -6,6 +6,7 @@
     <title>Memory Match</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
+    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
     <div class="wrapper">
@@ -27,56 +28,59 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; max-width: 900px; margin: 0 auto;">
                     <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Exit</a>
                     
-                    <div class="result-score-display">
+                    <div class="result-score-display" id="stat-line">
                         <div class="stat-group">
-                            <span class="stat-label">Pairs</span>
-                            <span id="match-count" class="stat-value">0</span>
+                            <span class="stat-label">PAIRS</span>
+                            <span class="stat-value"><span id="match-count">0</span> / 8</span>
                         </div>
                         <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.2);"></div>
                         <div class="stat-group">
-                            <span class="stat-label">Moves</span>
-                            <span id="move-count" class="stat-value">0</span>
+                            <span class="stat-label">MOVES</span>
+                            <span class="stat-value" id="move-count">0</span>
                         </div>
                     </div>
+
+                    <button class="action-button btn-reset" onclick="resetGame()">Restart</button>
                 </div>
 
-                <h1 style="margin-top: 30px;">🧠 Memory Match</h1>
-                <div class="game-board" id="board"></div>
-                <button onclick="resetGame()" class="action-button">Restart Game</button>
+                <div class="memory-grid" id="game-board"></div>
             </section>
         </main>
     </div>
 
     <script>
-        const icons = ['🇬🇧', '🇵🇱', '🎡', '🥟', '💂', '🐉', '☎️', '🐂'];
+        const icons = ['🏰', '🎡', '🌭', '⚽', '🎨', '🍕', '🚗', '🎸'];
+        let cards = [...icons, ...icons];
         let flippedCards = [];
-        let moves = 0;
         let matches = 0;
+        let moves = 0;
         let canFlip = true;
 
-        function createBoard() {
-            const board = document.getElementById('board');
-            board.innerHTML = '';
-            const gameIcons = [...icons, ...icons].sort(() => Math.random() - 0.5);
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
 
-            gameIcons.forEach(icon => {
+        function createBoard() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = '';
+            shuffle(cards).forEach((icon, index) => {
                 const card = document.createElement('div');
-                card.className = 'memory-card';
+                card.classList.add('memory-card');
                 card.dataset.icon = icon;
                 card.innerHTML = `
-                    <div class="card-face card-back"></div>
-                    <div class="card-face card-front">${icon}</div>
+                    <div class="card-front">?</div>
+                    <div class="card-back">${icon}</div>
                 `;
-                card.onclick = () => flipCard(card);
+                card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
         }
 
-        function flipCard(card) {
-            if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-            
-            card.classList.add('flipped');
-            flippedCards.push(card);
+        function flipCard() {
+            if (!canFlip || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+
+            this.classList.add('flipped');
+            flippedCards.push(this);
 
             if (flippedCards.length === 2) {
                 moves++;
@@ -88,6 +92,7 @@
 
         function checkMatch() {
             const [c1, c2] = flippedCards;
+            
             if (c1.dataset.icon === c2.dataset.icon) {
                 c1.classList.add('matched');
                 c2.classList.add('matched');
@@ -95,8 +100,9 @@
                 flippedCards = [];
                 canFlip = true;
                 updateStats();
+                
                 if (matches === icons.length) {
-                    setTimeout(() => alert(`Victory! ${moves} moves.`), 500);
+                    setTimeout(() => alert(`Victory! You found all pairs in ${moves} moves.`), 500);
                 }
             } else {
                 setTimeout(() => {
@@ -109,24 +115,17 @@
         }
 
         function updateStats() {
-            const mCount = document.getElementById('match-count');
-            const vCount = document.getElementById('move-count');
-            
-            mCount.innerText = matches;
-            vCount.innerText = moves;
-
-            // Эффект "прыжка" при обновлении
-            mCount.classList.add('score-bump');
-            vCount.classList.add('score-bump');
-            setTimeout(() => {
-                mCount.classList.remove('score-bump');
-                vCount.classList.remove('score-bump');
-            }, 200);
+            document.getElementById('match-count').innerText = matches;
+            document.getElementById('move-count').innerText = moves;
         }
 
         function resetGame() {
-            moves = 0; matches = 0; flippedCards = []; canFlip = true;
-            updateStats(); createBoard();
+            moves = 0;
+            matches = 0;
+            flippedCards = [];
+            canFlip = true;
+            updateStats();
+            createBoard();
         }
 
         createBoard();
