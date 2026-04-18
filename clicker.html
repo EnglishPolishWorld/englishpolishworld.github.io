@@ -245,7 +245,7 @@
             items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
-                const itemWidth = 126;
+                const itemWidth = 94; // 90px ширина + 4px отступы
                 const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
