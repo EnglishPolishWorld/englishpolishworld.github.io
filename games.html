@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mini Games</title>
+    <title>Mini Games - Lobby</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
-
 <body>
     <div class="wrapper">
         <header class="container">
@@ -28,12 +25,10 @@
 
         <main class="container">
             <section class="game-section">
-                
                 <div id="game-lobby-screen">
                     <h1 class="lobby-title">Select the game</h1>
-                 
                     <div class="game-selection-wrapper">
-                        <div class="ui-game-card" onclick="initiateSortingGame()">
+                        <div class="ui-game-card" onclick="openGame('sorting_game.html')">
                             <h3>🧩 Sorting Master</h3>
                             <p>Divide symbols between UK and Poland.</p>
                             <button class="action-button">Play Now</button>
@@ -41,138 +36,32 @@
                     </div>
                 </div>
 
-                <div id="sorting-game-engine">
-                    <button onclick="returnToLobby()" class="action-button btn-reset">← Back to Menu</button>
-                    <h1>🧩 Sorting Master</h1>
-
-                    <div class="item-source-vault" id="global-items-container">
-                        <div class="drag-item" draggable="true" id="node-1" data-target="uk">Big Ben 🕰️</div>
-                        <div class="drag-item" draggable="true" id="node-2" data-target="pl">Pierogi 🥟</div>
-                        <div class="drag-item" draggable="true" id="node-3" data-target="uk">Double Decker 🚌</div>
-                        <div class="drag-item" draggable="true" id="node-4" data-target="pl">Żubr 🐂</div>
-                        <div class="drag-item" draggable="true" id="node-5" data-target="uk">Royal Guard 💂</div>
-                        <div class="drag-item" draggable="true" id="node-6" data-target="pl">Wawel Dragon 🐉</div>
-                        <div class="drag-item" draggable="true" id="node-7" data-target="uk">Red Telephone Box ☎️</div>
-                        <div class="drag-item" draggable="true" id="node-8" data-target="uk">Cricket Bat 🏏</div>
-                        <div class="drag-item" draggable="true" id="node-9" data-target="uk">Cup of Tea ☕</div>
-                        <div class="drag-item" draggable="true" id="node-10" data-target="pl">Oscypek 🧀</div>
-                        <div class="drag-item" draggable="true" id="node-11" data-target="pl">Syrenka 🧜‍♀️</div>
-                        <div class="drag-item" draggable="true" id="node-12" data-target="uk">Sherlock Holmes 🕵️</div>
-                        <div class="drag-item" draggable="true" id="node-13" data-target="uk">Stonehenge 🏛️</div>
-                        <div class="drag-item" draggable="true" id="node-14" data-target="pl">Zapiekanka 🥖</div>
-                        <div class="drag-item" draggable="true" id="node-15" data-target="pl">Fryderyk Chopin 🎹</div>
-                        <div class="drag-item" draggable="true" id="node-16" data-target="pl">Amber 💎</div>
-                    </div>
-
-                    <div class="target-drop-zones">
-                        <div class="culture-bin" id="uk"><h3>🇬🇧 UNITED KINGDOM</h3></div>
-                        <div class="culture-bin" id="pl"><h3>🇵🇱 POLAND</h3></div>
-                    </div>
-
-                    <div class="game-controls">
-                        <button id="final-validation-btn" class="action-button btn-check">Check Results</button>
-                        <button id="system-reset-btn" class="action-button btn-reset">Clear Board</button>
-                        <div id="visual-score-output" class="result-score-display"></div>
-                    </div>
+                <div id="game-window-container" style="display: none;">
+                    <button onclick="closeGame()" class="action-button btn-reset">← Back to Menu</button>
+                    <iframe id="game-frame" src="" style="width: 100%; height: 80vh; border: none; margin-top: 20px;"></iframe>
                 </div>
-
             </section>
         </main>
     </div>
 
     <script>
-        const allGameNodes = document.querySelectorAll('.drag-item');
-        const dropContainers = document.querySelectorAll('.culture-bin');
-        const mainVault = document.getElementById('global-items-container');
-
-        function initiateSortingGame() {
+        function openGame(url) {
             document.getElementById('game-lobby-screen').style.display = 'none';
-            const engine = document.getElementById('sorting-game-engine');
-            engine.style.display = 'block';
-            setTimeout(() => { engine.style.opacity = '1'; }, 50);
-            scrambleElements();
+            const container = document.getElementById('game-window-container');
+            const frame = document.getElementById('game-frame');
+            
+            frame.src = url;
+            container.style.display = 'block';
         }
 
-        function returnToLobby() {
+        function closeGame() {
+            const container = document.getElementById('game-window-container');
+            const frame = document.getElementById('game-frame');
+            
+            frame.src = "";
+            container.style.display = 'none';
             document.getElementById('game-lobby-screen').style.display = 'block';
-            document.getElementById('sorting-game-engine').style.display = 'none';
-            performSystemReset();
         }
-
-        function scrambleElements() {
-            const fragments = Array.from(mainVault.children);
-            for (let i = fragments.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                mainVault.appendChild(fragments[j]);
-            }
-        }
-
-        allGameNodes.forEach(node => {
-            node.addEventListener('dragstart', (event) => {
-                event.dataTransfer.setData('text', event.target.id);
-            });
-
-            node.addEventListener('touchstart', function(event) {
-                window.activeDraggingNode = this;
-                this.style.opacity = '0.7';
-            }, {passive: true});
-
-            node.addEventListener('touchend', function(event) {
-                this.style.opacity = '1';
-                const touch = event.changedTouches[0];
-                const elementUnderPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-                const targetZone = elementUnderPoint ? elementUnderPoint.closest('.culture-bin') : null;
-                
-                if (targetZone) {
-                    targetZone.appendChild(this);
-                }
-                window.activeDraggingNode = null;
-            });
-
-            node.addEventListener('touchmove', (e) => { if(window.activeDraggingNode) e.preventDefault(); }, {passive: false});
-        });
-
-        dropContainers.forEach(container => {
-            container.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                container.classList.add('drag-over-active');
-            });
-            container.addEventListener('dragleave', () => container.classList.remove('drag-over-active'));
-            container.addEventListener('drop', (event) => {
-                event.preventDefault();
-                container.classList.remove('drag-over-active');
-                const elementID = event.dataTransfer.getData('text');
-                const draggedElement = document.getElementById(elementID);
-                container.appendChild(draggedElement);
-            });
-        });
-
-        document.getElementById('final-validation-btn').onclick = function() {
-            let score = 0;
-            allGameNodes.forEach(node => {
-                const currentParent = node.parentElement;
-                if (currentParent.classList.contains('culture-bin')) {
-                    if (node.dataset.target === currentParent.id) {
-                        node.classList.add('status-correct');
-                        score++;
-                    } else {
-                        node.classList.add('status-wrong');
-                    }
-                }
-            });
-            document.getElementById('visual-score-output').innerText = "Final Score: " + score + " / 16";
-        };
-
-        function performSystemReset() {
-            allGameNodes.forEach(node => {
-                node.classList.remove('status-correct', 'status-wrong');
-                mainVault.appendChild(node);
-            });
-            document.getElementById('visual-score-output').innerText = "";
-            scrambleElements();
-        }
-
-        document.getElementById('system-reset-btn').onclick = performSystemReset;
     </script>
 </body>
 </html>
