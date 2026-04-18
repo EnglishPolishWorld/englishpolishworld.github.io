@@ -223,21 +223,104 @@
             save();
         }
 
-        // Обновленная функция рендера для поддержки новых стилей
-        function render() {
-            document.getElementById('balance').innerText = coins.toLocaleString();
-            const list = document.getElementById('items-list');
-            list.innerHTML = inventory.map((item, i) => `
-                <div class="item-card" style="color: ${item.color || '#b0c3d9'}; box-shadow: inset 0 -4px 0 ${item.color || '#444'}">
-                    <span class="item-emoji" style="filter: drop-shadow(0 0 15px ${item.color}66);">${item.e}</span>
-                    <div style="margin-bottom: 5px;">
-                        <strong style="display:block; font-size: 0.9rem;">${item.n}</strong>
-                        <small style="color: #00ed9a; font-weight:bold;">${item.p.toLocaleString()} 💵</small>
-                    </div>
-                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
-                </div>
-            `).join('');
+       // Обновленная функция рендера инвентаря
+function render() {
+    // Обновляем баланс
+    const balanceEl = document.getElementById('balance');
+    if (balanceEl) balanceEl.innerText = coins.toLocaleString();
+
+    const list = document.getElementById('items-list');
+    if (!list) return;
+
+    // Генерируем карточки предметов
+    list.innerHTML = inventory.map((item, i) => `
+        <div class="item-card" style="border-color: ${item.color || '#333'}">
+            <span style="font-size:3rem; display:block; filter: drop-shadow(0 0 8px ${item.color || 'transparent'});">
+                ${item.e}
+            </span>
+            <strong style="color: ${item.color || '#fff'}; font-size: 0.85rem; margin-top: 5px;">${item.n}</strong>
+            <small style="color: #00ed9a;">${item.p.toLocaleString()} 💵</small>
+            <button class="btn-sell" onclick="sell(${i})">Sell</button>
+        </div>
+    `).join('');
+}
+
+// Исправленная функция вращения
+function spin(id) {
+    if (isSpinning) return;
+    const box = shopData[id];
+    if (coins < box.cost) return;
+
+    coins -= box.cost;
+    isSpinning = true;
+    render();
+
+    const reel = document.getElementById('reel');
+    const card = document.getElementById('casino-card');
+    const msg = document.getElementById('casino-msg');
+    
+    // Сброс позиции ленты
+    reel.style.transition = 'none';
+    reel.style.transform = 'translateX(0)';
+    
+    // Определение результата (логика шансов из твоего кода)
+    let result;
+    const luck = Math.random() * 100;
+    if (luck < 50) {
+        result = {n: "Empty", e: "💨", p: 0, fail: true, color: "#555"};
+    } else {
+        if (id === 'c10') {
+            result = (Math.random() * 100 < 90) ? {...box.items[0], color: "#555"} : {...box.items[Math.floor(Math.random()*9)+1], color: "#eb4b4b"};
+        } else {
+            const r = Math.random() * 100;
+            let idx = r > 98 ? 9 : r > 90 ? 8 : r > 75 ? 7 : r > 55 ? 6 : r > 35 ? 5 : Math.floor(Math.random()*5);
+            let color = idx > 8 ? "#eb4b4b" : idx > 6 ? "#d32ee6" : idx > 4 ? "#4b69ff" : "#b0c3d9";
+            result = {...box.items[idx], color: color};
         }
+    }
+
+    // Заполнение ленты
+    let tapeHTML = '';
+    for(let i=0; i<60; i++) {
+        const randomItem = box.items[Math.floor(Math.random()*box.items.length)];
+        tapeHTML += `<div class="reel-item-horizontal">${randomItem.e}</div>`;
+    }
+    reel.innerHTML = tapeHTML;
+
+    // Установка финального предмета на позицию 55
+    const items = reel.querySelectorAll('.reel-item-horizontal');
+    items[55].innerHTML = result.e;
+    items[55].style.borderBottomColor = result.color || '#444';
+
+    // Запуск анимации (120px ширина + 6px margin = 126px шаг)
+    setTimeout(() => {
+        const itemWidth = 126; 
+        const centerOffset = card.offsetWidth / 2;
+        const stopPos = (55 * itemWidth) - centerOffset + (itemWidth / 2);
+        
+        reel.style.transition = 'transform 4.5s cubic-bezier(0.1, 0, 0.1, 1)';
+        reel.style.transform = `translateX(-${stopPos}px)`;
+    }, 50);
+
+    // Окончание прокрутки
+    setTimeout(() => {
+        isSpinning = false;
+        if (result.fail) {
+            card.classList.add('shake');
+            msg.innerText = "Empty Case! 💨";
+            msg.style.color = "#ff4757";
+            setTimeout(() => card.classList.remove('shake'), 400);
+        } else {
+            inventory.push(result);
+            card.classList.add('win-flash');
+            msg.innerText = `YOU GOT: ${result.n}!`;
+            msg.style.color = result.color;
+            setTimeout(() => card.classList.remove('win-flash'), 600);
+        }
+        render();
+        save();
+    }, 4600);
+}
 
         window.onload = load;
     </script>
