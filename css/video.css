@@ -73,17 +73,18 @@ header nav ul li.active a {
 }
 
 .build {
-    background: rgba(20, 20, 40, 0.4);
-    border: 1px solid rgba(52, 152, 219, 0.2);
-    border-radius: 15px;
-    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05); /* Легкий прозрачный фон */
+    border: 2px solid rgba(52, 152, 219, 0.3); /* Твоя синяя рамка */
+    border-radius: 25px; /* Скругленные углы */
+    padding: 30px;
     text-align: center;
-    transition: 0.3s;
+    transition: 0.3s ease;
 }
 
 .build:hover {
-    transform: translateY(-8px);
-    border-color: #3498db;
+    border-color: #3498db; /* Яркая рамка при наведении */
+    background: rgba(52, 152, 219, 0.1);
+    transform: translateY(-5px);
 }
 
 /* 5. МИНИ-ИГРЫ И КВИЗЫ (Drag & Drop) */
