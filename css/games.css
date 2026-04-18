@@ -331,7 +331,7 @@
 .word-display {
     font-size: clamp(2rem, 8vw, 3.5rem);
     letter-spacing: 12px;
-    color: #00edd9;
+    color: #00ed9a;
     margin: 30px 0;
     text-transform: uppercase;
     font-weight: 700;
