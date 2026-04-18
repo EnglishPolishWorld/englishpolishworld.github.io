@@ -155,6 +155,7 @@ header nav ul li.active a {
         flex-direction: column; /* Лого над меню */
         gap: 1rem;
         text-align: center;
+        }
 
         .game-container {
     padding: 20px;
@@ -208,6 +209,7 @@ header nav ul li.active a {
 
 .zone .drag-item {
     margin-top: 5px;
+    }
     .game-card {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.2);
