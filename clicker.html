@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker1.css?v=1.1">
+    <link rel="stylesheet" href="css/clicker.css?v=1.1">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -158,14 +158,41 @@
             return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
         }
 
-        function showPreview(id) {
-            const box = document.getElementById('case-items-list');
-            document.getElementById('case-preview-section').style.display = 'block';
-            box.innerHTML = shopData[id].items.map((it, idx) => {
-                const r = getRarityData(idx, it.isUniverse);
-                return `<div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div>`;
-            }).join('');
+       function showPreview(id) {
+    const box = document.getElementById('case-items-list');
+    const previewSection = document.getElementById('case-preview-section');
+    previewSection.style.display = 'block';
+    
+    const items = shopData[id].items;
+    
+    box.innerHTML = items.map((it, idx) => {
+        const r = getRarityData(idx, it.isUniverse);
+        let chance = 0;
+
+        // Логика расчета шансов
+        if (id === 'c11') {
+            // Для Impossible кейса
+            chance = it.isUniverse ? 0.01 : 0.99; 
+        } else {
+            // Для обычных кейсов (учитываем 50% шанс на пустой кейс)
+            const baseChance = 50; 
+            if (idx === 11) chance = (baseChance * 0.02);      // Legendary (2% от 50%)
+            else if (idx === 9) chance = (baseChance * 0.08);  // Mythic (8% от 50%)
+            else if (idx === 7) chance = (baseChance * 0.15);  // Epic (15% от 50%)
+            else if (idx === 5) chance = (baseChance * 0.25);  // Rare (25% от 50%)
+            else if (idx < 5) chance = (baseChance * 0.50) / 5; // Common (делим остаток между 5 предметами)
         }
+
+        return `
+            <div class="preview-item-wrapper">
+                <div class="preview-item" style="border-bottom-color: ${r.color}">
+                    ${it.e}
+                </div>
+                <div class="item-chance" style="color: ${r.color}">${chance.toFixed(idx < 5 && id !== 'c11' ? 1 : 2)}%</div>
+            </div>
+        `;
+    }).join('');
+}
 
         function generateCaseButtons() {
             document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
