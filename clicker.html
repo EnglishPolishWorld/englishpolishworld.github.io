@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css">
+    <link rel="stylesheet" href="css/clicker1.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -51,14 +51,6 @@
                         <button class="close-btn" onclick="toggleCasino()">×</button>
                         <h2 style="color: #ffcc00;">Case Opening</h2>
                         
-                        <div class="multi-open-selector">
-                            <span class="multi-label">Open:</span>
-                            <button class="multi-btn active" id="m1" onclick="setMulti(1)">x1</button>
-                            <button class="multi-btn" id="m2" onclick="setMulti(2)">x2</button>
-                            <button class="multi-btn" id="m5" onclick="setMulti(5)">x5</button>
-                            <button class="multi-btn" id="m10" onclick="setMulti(10)">x10</button>
-                        </div>
-
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
@@ -81,7 +73,6 @@
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
-        let openMultiplier = 1;
 
         const shopData = {
             c1: { n: "Stationery", cost: 50, icon: "📦", items: [
@@ -129,12 +120,6 @@
             ]}
         };
 
-        function setMulti(num) {
-            openMultiplier = num;
-            document.querySelectorAll('.multi-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('m' + num).classList.add('active');
-        }
-
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
         function load() {
@@ -178,14 +163,9 @@
 
         function handleOpen(id) {
             if (isSpinning) return;
-            const cost = shopData[id].cost * openMultiplier;
+            const cost = shopData[id].cost;
             if (coins < cost) { alert("Not enough ⭐!"); return; }
-
-            if (openMultiplier === 1) {
-                spin(id);
-            } else {
-                multiSpin(id);
-            }
+            spin(id);
         }
 
         function calculateWinner(id) {
@@ -193,7 +173,7 @@
             const luck = Math.random() * 100;
 
             if (id === 'c11') {
-                if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
+                if (luck < 99.9) return {n: "Empty", e: "💨", p: 0, fail: true};
                 const item = box.items[0];
                 return {...item, ...getRarityData(11, true), fail: false};
             } else {
@@ -202,20 +182,6 @@
                 let idx = (r > 98) ? 11 : (r > 90) ? 9 : (r > 75) ? 7 : (r > 50) ? 5 : Math.floor(Math.random()*5);
                 return {...box.items[idx], ...getRarityData(idx), fail: false};
             }
-        }
-
-        function multiSpin(id) {
-            coins -= (shopData[id].cost * openMultiplier);
-            let wins = [];
-            for(let i=0; i<openMultiplier; i++) {
-                let res = calculateWinner(id);
-                if(!res.fail) {
-                    inventory.push(res);
-                    wins.push(res.e);
-                }
-            }
-            document.getElementById('casino-msg').innerText = wins.length > 0 ? `Won: ${wins.join(' ')}` : "All empty... 💨";
-            render(); save();
         }
 
         function spin(id) {
