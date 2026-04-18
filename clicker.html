@@ -161,70 +161,46 @@
       function showPreview(id) {
     const box = document.getElementById('case-items-list');
     const previewSection = document.getElementById('case-preview-section');
+    if (!box || !previewSection) return;
+
     previewSection.style.display = 'block';
-    
     const items = shopData[id].items;
     const isImpossible = (id === 'c11');
-    
-    // Определяем базовый шанс на "пусто"
-    let failChance = isImpossible ? 99 : 50;
-    let contentHtml = '';
+    const failChance = isImpossible ? 99 : 50;
 
-    // 1. Добавляем иконку "Пусто", если шанс проигрыша больше 0
-    contentHtml += `
-        <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.7;">
-            <div class="preview-item" style="border-bottom: 3px solid #666; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">
-                💨
-            </div>
-            <div style="color: #888; font-size: 0.75rem; font-weight: bold; font-family: monospace;">
-                ${failChance}%
-            </div>
+    let contentHtml = `
+        <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.6;">
+            <div class="preview-item" style="border-bottom: 3px solid #666; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">💨</div>
+            <div style="color: #888; font-size: 0.75rem; font-weight: bold;">${failChance}%</div>
         </div>
     `;
 
-    // 2. Добавляем остальные предметы
     contentHtml += items.map((it, idx) => {
         const r = getRarityData(idx, it.isUniverse);
         let chance = 0;
 
         if (isImpossible) {
-            chance = it.isUniverse ? 1 : 0; // В Impossible "Мусор" технически входит в те 99% выше
-            if (it.n === "Trash") return ''; // Не дублируем мусор, если он уже в 99%
+            if (it.isUniverse) chance = 1;
         } else {
-            const lootPool = 50; 
-            if (idx === 11) chance = lootPool * 0.02;      
-            else if (idx === 9) chance = lootPool * 0.08;  
-            else if (idx === 7) chance = lootPool * 0.15;  
-            else if (idx === 5) chance = lootPool * 0.25;  
-            else if (idx < 5) chance = (lootPool * 0.50) / 5; 
+            const pool = 50;
+            if (idx >= 11) chance = pool * 0.02;
+            else if (idx >= 9) chance = pool * 0.08;
+            else if (idx >= 7) chance = pool * 0.15;
+            else if (idx >= 5) chance = pool * 0.25;
+            else if (idx < 5) chance = (pool * 0.50) / 5;
         }
 
         if (chance === 0 && !it.isUniverse) return '';
 
         return `
             <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                <div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">
-                    ${it.e}
-                </div>
-                <div style="color: ${r.color}; font-size: 0.75rem; font-weight: bold; font-family: monospace;">
-                    ${chance.toFixed(isImpossible ? 2 : 1)}%
-                </div>
+                <div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">${it.e}</div>
+                <div style="color: ${r.color}; font-size: 0.75rem; font-weight: bold;">${chance.toFixed(isImpossible ? 0 : 1)}%</div>
             </div>
         `;
     }).join('');
 
     box.innerHTML = contentHtml;
-}
-
-        return `
-            <div class="preview-item-wrapper">
-                <div class="preview-item" style="border-bottom-color: ${r.color}">
-                    ${it.e}
-                </div>
-                <div class="item-chance" style="color: ${r.color}">${chance.toFixed(idx < 5 && id !== 'c11' ? 1 : 2)}%</div>
-            </div>
-        `;
-    }).join('');
 }
 
         function generateCaseButtons() {
