@@ -183,8 +183,12 @@ body {
     will-change: transform;
 }
 
+./* Найти и заменить эти части в clicker.css */
+
 .reel-item-horizontal {
     min-width: 120px;
+    width: 120px; /* Фиксируем ширину */
+    flex-shrink: 0; /* ЗАПРЕЩАЕМ СЖАТИЕ */
     height: 100px;
     margin: 0 3px;
     background: #1a1a1a;
@@ -195,6 +199,8 @@ body {
     font-size: 3rem;
     border-bottom: 4px solid #333;
 }
+
+/* УБЕРИТЕ лишнюю } в самом конце файла, если она там есть */
 
 /* --- РЕДКОСТИ --- */
 .rarity-common { border-color: #26de81 !important; }
