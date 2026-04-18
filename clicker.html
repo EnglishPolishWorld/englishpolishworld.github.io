@@ -223,15 +223,15 @@
         function render() {
             document.getElementById('balance').innerText = coins.toLocaleString();
             const list = document.getElementById('items-list');
-            list.innerHTML = inventory.map((item, i) => `
-                <div class="item-card" style="border-bottom: 3px solid ${item.color || '#444'}">
-                    <span style="font-size:2rem">${item.e}</span><br>
-                    <strong>${item.n}</strong><br>
-                    <small>${item.p.toLocaleString()} 💵</small><br>
-                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
-                </div>
-            `).join('');
-        }
+           // Найди это в функции render() и замени:
+list.innerHTML = inventory.map((item, i) => `
+    <div class="item-card" style="color: ${item.color || '#444'}">
+        <span style="font-size:2rem">${item.e}</span>
+        <strong>${item.n}</strong>
+        <small>${item.p.toLocaleString()} 💵</small>
+        <button class="btn-sell" onclick="sell(${i})">Sell</button>
+    </div>
+`).join('');
 
         window.onload = load;
     </script>
