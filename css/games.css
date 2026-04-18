@@ -15,6 +15,22 @@
     display: block;
     transition: all 0.5s ease;
 }
+/* Добавьте это в секцию ЛОББИ или в конец файла */
+.game-selection-wrapper {
+    display: flex;          /* Включает режим гибкого контейнера */
+    flex-direction: row;    /* Выстраивает элементы в горизонтальную линию */
+    justify-content: center;/* Центрирует карточки по середине экрана */
+    gap: 30px;              /* Создает расстояние между карточками */
+    flex-wrap: wrap;        /* Позволяет карточкам переноситься на новую строку на очень узких экранах */
+    margin-top: 20px;
+}
+
+/* Настройка ссылок-оберток, чтобы они не сужали карточки */
+.game-selection-wrapper a {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+}
 
 .ui-game-card {
     background: rgba(255, 255, 255, 0.07);
