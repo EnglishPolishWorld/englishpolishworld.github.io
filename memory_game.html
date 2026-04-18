@@ -96,9 +96,10 @@
             }
         }
 
-        function updateStats() {
-            document.getElementById('stat-line').innerText = `Pairs: ${matches}/${icons.length} | Moves: ${moves}`;
-        }
+       function updateStats() {
+    document.getElementById('match-count').innerText = matches;
+    document.getElementById('move-count').innerText = moves;
+}
 
         function resetGame() {
             moves = 0; matches = 0; flippedCards = []; canFlip = true;
