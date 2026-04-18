@@ -55,7 +55,7 @@
                         <p id="casino-msg">Select a box to open:</p>
                         
                         <div class="casino-buttons" style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="action-button" onclick="spin('clothes')">📦 Clothes Box (100 💵)</button>
+                            <button class="action-button" onclick="spin('clothes')">📦 Clothes Box (50 💵)</button>
                             <button class="action-button" onclick="spin('tech')">💻 Tech Box (1,500 💵)</button>
                             <button class="action-button" onclick="spin('estate')">🏰 Estate Box (25,000 💵)</button>
                         </div>
@@ -71,7 +71,7 @@
         let inventory = [];
 
         const shopData = {
-            clothes: { cost: 100, lose: 30, items: [
+            clothes: { cost: 50, lose: 30, items: [
                 {n: "Socks", e: "🧦", p: 10}, {n: "Cap", e: "🧢", p: 150}, {n: "Hoodie", e: "🧥", p: 500}, {n: "Suit", e: "🕴️", p: 2500}
             ]},
             tech: { cost: 1500, lose: 60, items: [
