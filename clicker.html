@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Hidden Page</title>
+    <title>Money Tycoon - Balanced Edition</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.2">
+    <link rel="stylesheet" href="css/clicker.css">
 </head>
 <body> 
     <div class="wrapper">
@@ -35,29 +35,30 @@
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">💵</div>
                     
-                    <div class="button-group" style="display: flex; gap: 10px; justify-content: center;">
+                    <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
                         <button class="action-button" onclick="window.location.href='games.html'">← Back</button>
-                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000;">🎰 Casino</button>
+                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000;">🎰 Open Market</button>
                     </div>
                 </div>
 
                 <div class="inventory-section">
                     <h3>📦 Your Assets</h3>
-                    <div id="items-list" class="items-grid">
-                    </div>
+                    <div id="items-list" class="items-grid"></div>
                 </div>
 
                 <div id="casino-overlay" class="casino-overlay" style="display: none;">
                     <div class="casino-content">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
-                        <h2 style="color: #ffcc00;">Secret Market</h2>
+                        <h2 style="color: #ffcc00;">Global Market</h2>
                         <div id="slot-machine" class="slot-display">? | ? | ?</div>
-                        <p id="casino-msg">Select a box to open:</p>
+                        <p id="casino-msg">Risk: 30% | Win: 70%</p>
                         
-                        <div class="casino-buttons" style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="action-button" onclick="spin('clothes')">📦 Clothes Box (50 💵)</button>
-                            <button class="action-button" onclick="spin('tech')">💻 Tech Box 300 💵)</button>
-                            <button class="action-button" onclick="spin('estate')">🏰 Estate Box (2,500 💵)</button>
+                        <div class="casino-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <button class="action-button" onclick="spin('common')">📦 Common (150)</button>
+                            <button class="action-button" onclick="spin('tech')">💻 Tech (2.5k)</button>
+                            <button class="action-button" onclick="spin('transport')">🚗 Vehicles (20k)</button>
+                            <button class="action-button" onclick="spin('estate')">🏰 Estate (150k)</button>
+                            <button class="action-button" onclick="spin('galactic')" style="grid-column: span 2; background: #9b59b6;">🚀 Galactic (1.2M)</button>
                         </div>
                     </div>
                 </div>
@@ -66,37 +67,55 @@
     </div>
 
     <script>
-        // --- ДАННЫЕ ИГРЫ ---
         let coins = 0;
         let inventory = [];
 
         const shopData = {
-            clothes: { cost: 50, lose: 30, items: [
-                {n: "Socks", e: "🧦", p: 10}, {n: "Cap", e: "🧢", p: 15}, {n: "Hoodie", e: "🧥", p: 50}, {n: "Suit", e: "🕴️", p: 250}
+            common: { cost: 150, items: [
+                {n: "Used Napkin", e: "🧻", p: 10}, {n: "Rusty Key", e: "🔑", p: 50}, {n: "Old Cap", e: "🧢", p: 120}, 
+                {n: "Basic Tee", e: "👕", p: 250}, {n: "Fidget Spinner", e: "🌀", p: 400}, {n: "Silver Coin", e: "🪙", p: 800},
+                {n: "Rare Comic", e: "📚", p: 1500}, {n: "Sneakers", e: "👟", p: 3000}, {n: "Gold Ring", e: "💍", p: 7000}, 
+                {n: "Diamond Stud", e: "💎", p: 15000}
             ]},
-            tech: { cost: 300, lose: 30, items: [
-                {n: "Phone", e: "📱", p: 200}, {n: "Laptop", e: "💻", p: 300}, {n: "Server", e: "🧬", p: 450}, {n: "AI", e: "🤖", p: 2000}
+            tech: { cost: 2500, items: [
+                {n: "CD-Rom", e: "💿", p: 100}, {n: "Mouse", e: "🖱️", p: 500}, {n: "Keyboard", e: "⌨️", p: 1200},
+                {n: "Monitor", e: "🖥️", p: 3000}, {n: "Smartphone", e: "📱", p: 6000}, {n: "GPU", e: "📟", p: 12000},
+                {n: "Laptop", e: "💻", p: 25000}, {n: "Server Rack", e: "🗄️", p: 60000}, {n: "Microchip", e: "🏮", p: 150000},
+                {n: "AI Core", e: "🤖", p: 400000}
             ]},
-            estate: { cost: 2500, lose: 30, items: [
-                {n: "Garage", e: "🏚️", p: 1000}, {n: "Villa", e: "🏰", p: 1500}, {n: "Island", e: "🏝️", p: 4000}, {n: "Empire", e: "🌌", p: 50000}
+            transport: { cost: 20000, items: [
+                {n: "Skateboard", e: "🛹", p: 2000}, {n: "Scooter", e: "🛴", p: 8000}, {n: "Bicycle", e: "🚲", p: 18000},
+                {n: "Motorbike", e: "🏍️", p: 45000}, {n: "Old Sedan", e: "🚗", p: 90000}, {n: "Pickup Truck", e: "🛻", p: 200000},
+                {n: "SUV", e: "🚙", p: 450000}, {n: "Sports Car", e: "🏎️", p: 1000000}, {n: "Helicopter", e: "🚁", p: 3000000},
+                {n: "Luxury Yacht", e: "🛥️", p: 8000000}
+            ]},
+            estate: { cost: 150000, items: [
+                {n: "Tent", e: "⛺", p: 10000}, {n: "Wooden Cabin", e: "🛖", p: 50000}, {n: "Trailer", e: "🚛", p: 120000},
+                {n: "Small House", e: "🏡", p: 350000}, {n: "Penthouse", e: "🏢", p: 800000}, {n: "Mansion", e: "🏰", p: 2000000},
+                {n: "Skyscraper", e: "🏙️", p: 5000000}, {n: "Private Port", e: "⚓", p: 12000000}, {n: "Paradise Island", e: "🏝️", p: 40000000},
+                {n: "Ancient Castle", e: "🏰", p: 100000000}
+            ]},
+            galactic: { cost: 1200000, items: [
+                {n: "Space Suit", e: "👨‍🚀", p: 80000}, {n: "Satellite", e: "🛰️", p: 400000}, {n: "Space Probe", e: "🚀", p: 1000000},
+                {n: "Rover", e: "🚜", p: 5000000}, {n: "Space Station", e: "🛸", p: 25000000}, {n: "Moon Mine", e: "🌑", p: 90000000},
+                {n: "Mars Dome", e: "🏗️", p: 250000000}, {n: "Starship", e: "🚢", p: 700000000}, {n: "Solar System", e: "☀️", p: 5000000000},
+                {n: "The Universe", e: "🌌", p: 9999999999}
             ]}
         };
 
-        // --- СОХРАНЕНИЕ / ЗАГРУЗКА ---
         function save() {
-            localStorage.setItem('tycoon_save_coins', coins);
-            localStorage.setItem('tycoon_save_inv', JSON.stringify(inventory));
+            localStorage.setItem('tycoon_final_coins', coins);
+            localStorage.setItem('tycoon_final_inv', JSON.stringify(inventory));
         }
 
         function load() {
-            const c = localStorage.getItem('tycoon_save_coins');
-            const i = localStorage.getItem('tycoon_save_inv');
+            const c = localStorage.getItem('tycoon_final_coins');
+            const i = localStorage.getItem('tycoon_final_inv');
             if (c) coins = parseInt(c);
             if (i) inventory = JSON.parse(i);
             render();
         }
 
-        // --- МЕХАНИКИ ---
         function mine() {
             coins++;
             render();
@@ -114,29 +133,39 @@
             const slot = document.getElementById('slot-machine');
 
             if (coins < box.cost) {
-                msg.innerText = "Not enough cash! ❌";
+                msg.innerText = "Insufficient funds! ❌";
                 msg.style.color = "#ff4757";
                 return;
             }
 
             coins -= box.cost;
             render();
-            msg.innerText = "Spinning...";
+            msg.innerText = "Processing...";
             msg.style.color = "#ffcc00";
             slot.innerText = "🌀 | 🌀 | 🌀";
 
             setTimeout(() => {
                 const rand = Math.random() * 100;
-                if (rand < box.lose) {
-                    slot.innerText = "❌ | ❌ | ❌";
-                    msg.innerText = "LOSE! Try again.";
+                if (rand < 30) { // Фикс шанс проигрыша 30%
+                    slot.innerText = "📉 | 📉 | 📉";
+                    msg.innerText = "Market Crash! You lost.";
                     msg.style.color = "#ff4757";
                 } else {
-                    const itemRand = Math.floor(Math.random() * box.items.length);
-                    const item = box.items[itemRand];
+                    // Рандом среди 10 предметов с разным весом (шансом)
+                    const itemRand = Math.random() * 100;
+                    let idx;
+                    if (itemRand > 99) idx = 9;      // 1%
+                    else if (itemRand > 95) idx = 8; // 4%
+                    else if (itemRand > 85) idx = 7; // 10%
+                    else if (itemRand > 70) idx = 6; // 15%
+                    else if (itemRand > 50) idx = 5; // 20%
+                    else if (itemRand > 30) idx = 4; // 20%
+                    else idx = Math.floor(Math.random() * 4); // Остальные 30% на первые 4 предмета
+
+                    const item = box.items[idx];
                     inventory.push(item);
                     slot.innerText = `${item.e} | ${item.e} | ${item.e}`;
-                    msg.innerText = `WIN: ${item.n}!`;
+                    msg.innerText = `PROFIT: ${item.n}!`;
                     msg.style.color = "#00ed9a";
                 }
                 render();
@@ -154,9 +183,8 @@
         function render() {
             document.getElementById('balance').innerText = coins.toLocaleString();
             const list = document.getElementById('items-list');
-            if (inventory.length === 0) {
-                list.innerHTML = `<p style="opacity: 0.5;">Your assets are empty...</p>`;
-            } else {
+            list.innerHTML = "";
+            if (inventory.length > 0) {
                 list.innerHTML = inventory.map((item, i) => `
                     <div class="item-card">
                         <span class="item-emoji">${item.e}</span>
