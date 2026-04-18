@@ -158,30 +158,63 @@
             return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
         }
 
-       function showPreview(id) {
+      function showPreview(id) {
     const box = document.getElementById('case-items-list');
     const previewSection = document.getElementById('case-preview-section');
     previewSection.style.display = 'block';
     
     const items = shopData[id].items;
+    const isImpossible = (id === 'c11');
     
-    box.innerHTML = items.map((it, idx) => {
+    // Определяем базовый шанс на "пусто"
+    let failChance = isImpossible ? 99 : 50;
+    let contentHtml = '';
+
+    // 1. Добавляем иконку "Пусто", если шанс проигрыша больше 0
+    contentHtml += `
+        <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.7;">
+            <div class="preview-item" style="border-bottom: 3px solid #666; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">
+                💨
+            </div>
+            <div style="color: #888; font-size: 0.75rem; font-weight: bold; font-family: monospace;">
+                ${failChance}%
+            </div>
+        </div>
+    `;
+
+    // 2. Добавляем остальные предметы
+    contentHtml += items.map((it, idx) => {
         const r = getRarityData(idx, it.isUniverse);
         let chance = 0;
 
-        // Логика расчета шансов
-        if (id === 'c11') {
-            // Для Impossible кейса
-            chance = it.isUniverse ? 0.01 : 0.99; 
+        if (isImpossible) {
+            chance = it.isUniverse ? 1 : 0; // В Impossible "Мусор" технически входит в те 99% выше
+            if (it.n === "Trash") return ''; // Не дублируем мусор, если он уже в 99%
         } else {
-            // Для обычных кейсов (учитываем 50% шанс на пустой кейс)
-            const baseChance = 50; 
-            if (idx === 11) chance = (baseChance * 0.02);      // Legendary (2% от 50%)
-            else if (idx === 9) chance = (baseChance * 0.08);  // Mythic (8% от 50%)
-            else if (idx === 7) chance = (baseChance * 0.15);  // Epic (15% от 50%)
-            else if (idx === 5) chance = (baseChance * 0.25);  // Rare (25% от 50%)
-            else if (idx < 5) chance = (baseChance * 0.50) / 5; // Common (делим остаток между 5 предметами)
+            const lootPool = 50; 
+            if (idx === 11) chance = lootPool * 0.02;      
+            else if (idx === 9) chance = lootPool * 0.08;  
+            else if (idx === 7) chance = lootPool * 0.15;  
+            else if (idx === 5) chance = lootPool * 0.25;  
+            else if (idx < 5) chance = (lootPool * 0.50) / 5; 
         }
+
+        if (chance === 0 && !it.isUniverse) return '';
+
+        return `
+            <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">
+                    ${it.e}
+                </div>
+                <div style="color: ${r.color}; font-size: 0.75rem; font-weight: bold; font-family: monospace;">
+                    ${chance.toFixed(isImpossible ? 2 : 1)}%
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    box.innerHTML = contentHtml;
+}
 
         return `
             <div class="preview-item-wrapper">
