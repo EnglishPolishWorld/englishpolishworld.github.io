@@ -134,8 +134,9 @@ body {
     will-change: transform;
 }
 
+/* Найди этот блок и замени его, чтобы иконка не пропадала */
 .reel-item-horizontal {
-    min-width: 105px; /* Увеличено для лучшей видимости */
+    min-width: 105px;
     max-width: 105px;
     height: 105px;
     display: flex;
@@ -147,6 +148,22 @@ body {
     border-radius: 8px;
     flex-shrink: 0;
     border-bottom: 4px solid #444;
+    /* Добавь эти строки ниже: */
+    position: relative; 
+    overflow: visible; /* Чтобы иконка не обрезалась */
+    color: white; /* Цвет текста/эмодзи */
+    z-index: 1;
+}
+
+/* Если у тебя есть класс анимации победы, проверь его */
+.win-flash { 
+    animation: flash 0.6s ease-out; 
+    z-index: 10; /* Чтобы вспышка была поверх, но не скрывала предмет навсегда */
+}
+
+@keyframes flash {
+    0% { background: rgba(255, 255, 255, 0.4); }
+    100% { background: transparent; }
 }
 
 /* --- СЕТКА КЕЙСОВ --- */
