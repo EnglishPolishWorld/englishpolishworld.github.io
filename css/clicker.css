@@ -1,128 +1,103 @@
-/* --- ОСНОВНАЯ ЗОНА КЛИКЕРА --- */
+/* --- ЗОНА КЛИКЕРА --- */
 .clicker-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
     padding: 20px;
 }
 
 .main-coin {
-    font-size: clamp(6rem, 15vw, 10rem);
+    font-size: 8rem;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.3));
-}
-
-.main-coin:hover {
-    transform: scale(1.05);
+    transition: transform 0.1s;
+    filter: drop-shadow(0 0 25px rgba(0, 237, 154, 0.4));
+    margin: 30px 0;
 }
 
 .main-coin:active {
-    transform: scale(0.9);
+    transform: scale(0.85);
 }
 
 /* --- ИНВЕНТАРЬ --- */
 .inventory-section {
     width: 100%;
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.03);
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
-    padding: 20px;
-    margin-top: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border: 1px solid rgba(0, 237, 154, 0.2);
 }
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .item-card {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid #444;
-    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
     padding: 15px;
+    border: 1px solid #333;
     text-align: center;
-    transition: 0.3s;
-}
-
-.item-card:hover {
-    border-color: #00ed9a;
-    transform: translateY(-5px);
 }
 
 .item-emoji {
-    font-size: 2.5rem;
+    font-size: 2rem;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
-/* --- СЕКРЕТНОЕ КАЗИНО (ОКНО) --- */
+.btn-sell {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+
+/* --- КАЗИНО --- */
 .casino-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 2000;
+    backdrop-filter: blur(8px);
 }
 
 .casino-content {
-    background: #0a0a0a;
-    border: 3px solid #ffcc00;
-    border-radius: 30px;
-    padding: 50px;
-    text-align: center;
-    max-width: 500px;
+    background: #111;
+    border: 2px solid #ffcc00;
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 400px;
     width: 90%;
-    box-shadow: 0 0 50px rgba(255, 204, 0, 0.2);
+    text-align: center;
     position: relative;
+    box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
 }
 
 .slot-display {
-    font-size: 3.5rem;
+    font-size: 3rem;
     background: #000;
+    padding: 20px;
     border-radius: 15px;
-    padding: 30px;
-    margin: 25px 0;
-    border: 2px inset #333;
-    font-family: monospace;
+    margin: 20px 0;
     color: #ffcc00;
-    text-shadow: 0 0 10px #ffcc00;
+    border: 1px solid #333;
 }
 
 .close-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: #666;
-    font-size: 2rem;
-    cursor: pointer;
+    top: 15px; right: 15px;
+    background: none; border: none; color: #555;
+    font-size: 1.8rem; cursor: pointer;
 }
-
-.close-btn:hover { color: #fff; }
-
-/* Кнопка продажи */
-.btn-sell {
-    background: #e74c3c;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    margin-top: 10px;
-}
-
-.btn-sell:hover { background: #c0392b; }
