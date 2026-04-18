@@ -331,11 +331,12 @@
 .word-display {
     font-size: clamp(2rem, 8vw, 3.5rem);
     letter-spacing: 12px;
-    color: #00ed9a;
+    color: #00ed9a; /* Твой новый мятный цвет */
     margin: 30px 0;
     text-transform: uppercase;
     font-weight: 700;
-    text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+    /* Тень теперь тоже зеленая, с мягким свечением */
+    text-shadow: 0 0 20px rgba(0, 237, 154, 0.5); 
     word-break: break-all;
 }
 
