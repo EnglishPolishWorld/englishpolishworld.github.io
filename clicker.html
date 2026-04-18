@@ -50,15 +50,6 @@
                     <div class="casino-content" id="casino-card">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
                         <h2 style="color: #ffcc00;">Case Opening</h2>
-                        
-                        <div class="multi-open-selector" style="margin: 15px 0; display: flex; justify-content: center; gap: 10px; align-items: center;">
-                            <span style="color: #888; font-size: 0.9rem;">Open:</span>
-                            <button class="multi-btn active" id="m1" onclick="setMulti(1)">x1</button>
-                            <button class="multi-btn" id="m2" onclick="setMulti(2)">x2</button>
-                            <button class="multi-btn" id="m5" onclick="setMulti(5)">x5</button>
-                            <button class="multi-btn" id="m10" onclick="setMulti(10)">x10</button>
-                        </div>
-
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
@@ -81,7 +72,6 @@
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
-        let openMultiplier = 1;
 
         const shopData = {
             c1: { n: "Stationery", cost: 50, icon: "📦", items: [
@@ -129,13 +119,7 @@
                 {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
             ]}
         };
-
-        function setMulti(num) {
-            openMultiplier = num;
-            document.querySelectorAll('.multi-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('m' + num).classList.add('active');
-        }
-
+        
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
         function load() {
@@ -213,16 +197,15 @@
             `).join('');
         }
 
-        function handleOpen(id) {
-            if (isSpinning) return;
-            const cost = shopData[id].cost * openMultiplier;
-            if (coins < cost) { alert("Not enough ⭐!"); return; }
-
-            if (openMultiplier === 1) {
-                spin(id);
-            } else {
-                multiSpin(id);
-            }
+       function handleOpen(id) {
+    if (isSpinning) return;
+    const cost = shopData[id].cost;
+    if (coins < cost) { 
+        alert("Not enough ⭐!"); 
+        return; 
+    }
+    spin(id); // Теперь всегда открываем по одному
+}
         }
 
         function calculateWinner(id) {
