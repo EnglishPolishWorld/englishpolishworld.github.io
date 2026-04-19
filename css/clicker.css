@@ -242,57 +242,37 @@ body {
     color: #888;
     margin-top: 2px;
 }
-/* --- СТИЛИ ДЛЯ ЭЛИТНЫХ ПРЕДМЕТОВ (ГРАДИЕНТЫ) --- */
-
+/* --- ЭЛИТНЫЕ ГРАДИЕНТЫ С ЭФФЕКТОМ ВСЕЛЕННОЙ --- */
 .item-card.gradient-item {
-    border: none !important; /* Убираем стандартную рамку */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2);
+    border: none !important;
+    /* Добавляем неоновое свечение по краям, как у Вселенной */
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 20px rgba(0, 0, 0, 0.5);
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Та же анимация мерцания, что и у Вселенной */
+    animation: pulse-universe 2s infinite ease-in-out; 
 }
 
-/* Эффект блика при наведении */
-.item-card.gradient-item:hover {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-}
-
-/* Свечение для эмодзи внутри градиентных карточек */
+/* Эффект плавающих эмодзи (как в прошлом шаге, но с усиленным свечением) */
 .item-card.gradient-item span {
     display: inline-block;
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.7));
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
     animation: floating 3s ease-in-out infinite;
 }
 
-/* Кнопка продажи внутри градиентной карточки */
-.item-card.gradient-item .btn-sell {
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+/* Уникальная "текстура" — добавим легкий эффект шума/звезд на фон */
+.item-card.gradient-item::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+    opacity: 0.3;
+    pointer-events: none;
 }
 
-.item-card.gradient-item .btn-sell:hover {
-    background: rgba(255, 255, 255, 0.3) !important;
-}
-
-/* Анимация левитации для редких эмодзи */
-@keyframes floating {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
-/* Специфичный стиль для превью в рулетке (если выпал градиентный предмет) */
-.reel-item-horizontal.gradient-item {
-    border: none !important;
-    box-shadow: inset 0 0 15px rgba(255,255,255,0.3);
-}
-
-/* Дополнительная плашка редкости для текста в градиентах */
-.item-card.gradient-item strong {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    letter-spacing: 0.5px;
+/* Анимация пульсации (уже есть в твоем файле, но убедись, что она такая) */
+@keyframes pulse-universe {
+    0% { filter: brightness(1) saturate(1); transform: scale(1); }
+    50% { filter: brightness(1.3) saturate(1.2); transform: scale(1.02); }
+    100% { filter: brightness(1) saturate(1); transform: scale(1); }
 }
