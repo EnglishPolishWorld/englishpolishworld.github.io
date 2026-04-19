@@ -220,25 +220,25 @@ body {
 /* --- ПРЕДПРОСМОТР --- */
 .preview-item-wrapper {
     text-align: center;
-    width: 48px; /* Чуть шире самой иконки */
+    width: 42px; /* Чуть больше иконки */
 }
 
 .preview-icon-box {
     background: #1a1a1a;
-    width: 45px;  /* Возвращаем 45 */
-    height: 45px; /* Возвращаем 45 */
+    width: 40px;  /* Размер 40px */
+    height: 40px; /* Размер 40px */
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 7px;
-    font-size: 1.3rem; /* Чуть уменьшил шрифт, чтобы влезало в 45px */
+    border-radius: 6px;
+    font-size: 1.2rem; /* Соразмерный размер эмодзи */
     margin: 0 auto;
     transition: 0.2s;
 }
 
 .chance-label {
     display: block;
-    font-size: 0.6rem;
+    font-size: 0.55rem; /* Маленький текст шанса */
     color: #888;
-    margin-top: 3px;
+    margin-top: 2px;
 }
