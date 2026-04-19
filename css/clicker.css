@@ -219,19 +219,20 @@ body {
 
 .preview-item-wrapper {
     text-align: center;
-    width: 50px;
+    width: 65px; /* Увеличил ширину обертки под иконку */
 }
 
 .preview-icon-box {
     background: #1a1a1a;
-    width: 45px;
-    height: 45px;
+    width: 60px;  /* Было 45px */
+    height: 60px; /* Было 45px */
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    font-size: 1.2rem;
+    border-radius: 10px;
+    font-size: 1.8rem; /* Увеличил размер эмодзи (было 1.2) */
     margin: 0 auto;
+    transition: 0.2s;
 }
 
 .chance-label {
