@@ -451,3 +451,9 @@
     border-color: #3498db;
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
+.fact-card {
+    /* ... твои старые стили ... */
+    line-height: 1.4;
+    word-wrap: break-word;
+    font-size: 1.3rem; /* Чуть меньше шрифт, если текст длинный */
+}
