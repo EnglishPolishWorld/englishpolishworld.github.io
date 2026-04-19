@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="inventory-section">
-                    <h3>📦 Your Assets</h3>
+                    <h3>📦 Your Items</h3>
                     <div id="items-list" class="items-grid"></div>
                 </div>
 
@@ -51,14 +51,6 @@
                         <button class="close-btn" onclick="toggleCasino()">×</button>
                         <h2 style="color: #ffcc00;">Case Opening</h2>
                         
-                        <div class="multi-open-selector" style="margin: 15px 0; display: flex; justify-content: center; gap: 10px; align-items: center;">
-                            <span style="color: #888; font-size: 0.9rem;">Open:</span>
-                            <button class="multi-btn active" id="m1" onclick="setMulti(1)">x1</button>
-                            <button class="multi-btn" id="m2" onclick="setMulti(2)">x2</button>
-                            <button class="multi-btn" id="m5" onclick="setMulti(5)">x5</button>
-                            <button class="multi-btn" id="m10" onclick="setMulti(10)">x10</button>
-                        </div>
-
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
@@ -68,8 +60,8 @@
                         <div class="case-grid" id="case-list"></div>
 
                         <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT:</h4>
-                            <div id="case-items-list" class="items-preview-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"></div>
+                            <h4 id="chance-title" style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT & CHANCES:</h4>
+                            <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
                 </div>
@@ -81,7 +73,6 @@
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
-        let openMultiplier = 1;
 
         const shopData = {
             c1: { n: "Stationery", cost: 50, icon: "📦", items: [
@@ -89,7 +80,7 @@
                 {n:"Folder", e:"📁", p:100}, {n:"Book", e:"📖", p:250}, {n:"Bag", e:"🎒", p:500}, {n:"Clock", e:"⏰", p:1200}, {n:"Lamp", e:"💡", p:3000}, {n:"Gold Pen", e:"🖋️", p:10000}
             ]},
             c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
-                {n:"Sand", e:"⌛", p:50}, {n:"Stone", e:"🪨", p:120}, {n:"Wood", e:"🪵", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
+                {n:"Sand", e:"⌛", p:50}, {n:"Concrete", e:"🧱", p:120}, {n:"Steel", e:"🔩", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
                 {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Ruby", e:"🔻", p:25000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:150000}, {n:"Crown", e:"👑", p:500000}
             ]},
             c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
@@ -125,16 +116,9 @@
                 {n:"Glitch", e:"👾", p:2000000000000}, {n:"Matrix", e:"📺", p:6000000000000}, {n:"Infinit", e:"♾️", p:15000000000000}, {n:"Eternity", e:"🕰️", p:40000000000000}, {n:"Victory", e:"🚩", p:100000000000000}, {n:"Glow", e:"🌟", p:999999999999999}
             ]},
             c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [
-                {n:"Trash", e:"🗑️", p:1}, 
                 {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
             ]}
         };
-
-        function setMulti(num) {
-            openMultiplier = num;
-            document.querySelectorAll('.multi-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('m' + num).classList.add('active');
-        }
 
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
@@ -160,11 +144,29 @@
 
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
+            const title = document.getElementById('chance-title');
             document.getElementById('case-preview-section').style.display = 'block';
-            box.innerHTML = shopData[id].items.map((it, idx) => {
+            
+            let html = '';
+            // Добавляем шанс на пустоту
+            const emptyChance = (id === 'c11') ? 99 : 50;
+            html += `<div style="text-align:center;"><div style="background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem; border-bottom:3px solid #666;">💨</div><span style="font-size:0.7rem; color:#888;">${emptyChance}%</span></div>`;
+
+            // Добавляем предметы
+            shopData[id].items.forEach((it, idx) => {
                 const r = getRarityData(idx, it.isUniverse);
-                return `<div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div>`;
-            }).join('');
+                let chance = 0;
+                if(id === 'c11') chance = 1;
+                else {
+                    if(idx >= 11) chance = 1; // 2% от 50% = 1
+                    else if(idx >= 9) chance = 5; // 10% от 50%
+                    else if(idx >= 7) chance = 7.5; // 15% от 50%
+                    else if(idx >= 5) chance = 12.5; // 25% от 50%
+                    else chance = 24; // Остаток (~48% от 50%)
+                }
+                html += `<div style="text-align:center;"><div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div><span style="font-size:0.7rem; color:${r.color}">${chance}%</span></div>`;
+            });
+            box.innerHTML = html;
         }
 
         function generateCaseButtons() {
@@ -179,14 +181,9 @@
 
         function handleOpen(id) {
             if (isSpinning) return;
-            const cost = shopData[id].cost * openMultiplier;
+            const cost = shopData[id].cost;
             if (coins < cost) { alert("Not enough ⭐!"); return; }
-
-            if (openMultiplier === 1) {
-                spin(id);
-            } else {
-                multiSpin(id);
-            }
+            spin(id);
         }
 
         function calculateWinner(id) {
@@ -194,30 +191,13 @@
             const luck = Math.random() * 100;
             if (id === 'c11') {
                 if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
-                const subLuck = Math.random() * 100;
-                let isU = subLuck >= 99;
-                let item = isU ? box.items[1] : box.items[0];
-                return {...item, ...getRarityData(isU ? 11 : 0, isU), fail: false};
+                return {...box.items[0], ...getRarityData(0, true), fail: false};
             } else {
                 if (luck < 50) return {n: "Empty", e: "💨", p: 0, fail: true};
                 const r = Math.random() * 100;
                 let idx = (r > 98) ? 11 : (r > 90) ? 9 : (r > 75) ? 7 : (r > 50) ? 5 : Math.floor(Math.random()*5);
                 return {...box.items[idx], ...getRarityData(idx), fail: false};
             }
-        }
-
-        function multiSpin(id) {
-            coins -= (shopData[id].cost * openMultiplier);
-            let wins = [];
-            for(let i=0; i<openMultiplier; i++) {
-                let res = calculateWinner(id);
-                if(!res.fail) {
-                    inventory.push(res);
-                    wins.push(res.e);
-                }
-            }
-            document.getElementById('casino-msg').innerText = wins.length > 0 ? `Won: ${wins.join(' ')}` : "All empty... 💨";
-            render(); save();
         }
 
         function spin(id) {
@@ -245,7 +225,7 @@
             items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
-                const itemWidth = 118; // 100px ширина + 8px отступы
+                const itemWidth = 126; 
                 const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
