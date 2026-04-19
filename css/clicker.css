@@ -86,7 +86,7 @@ body {
     border: 2px solid #ffcc00;
     border-radius: 25px;
     padding: 20px 30px;
-    max-width: 720px;
+    max-width: 700px;
     width: 92%;
     text-align: center;
     position: relative;
@@ -217,20 +217,21 @@ body {
     gap: 8px;
 }
 
+/* --- ПРЕДПРОСМОТР --- */
 .preview-item-wrapper {
     text-align: center;
-    width: 65px; /* Увеличил ширину обертки под иконку */
+    width: 55px; /* Чуть увеличили ширину под иконку 52px */
 }
 
 .preview-icon-box {
     background: #1a1a1a;
-    width: 60px;  /* Было 45px */
-    height: 60px; /* Было 45px */
+    width: 52px;  /* Размер по вашему запросу */
+    height: 52px; /* Размер по вашему запросу */
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
-    font-size: 1.8rem; /* Увеличил размер эмодзи (было 1.2) */
+    border-radius: 8px;
+    font-size: 1.6rem; /* Соразмерный тексту эмодзи */
     margin: 0 auto;
     transition: 0.2s;
 }
