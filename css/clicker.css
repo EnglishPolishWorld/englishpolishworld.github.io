@@ -5,6 +5,7 @@ body {
     background-color: #0a0a0a;
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold; /* Пункт 5: Жирный шрифт */
 }
 
 /* --- ЗОНА КЛИКЕРА --- */
@@ -53,6 +54,7 @@ body {
     text-align: center;
     transition: 0.3s;
     border: 1px solid #333;
+    font-weight: bold;
 }
 
 .btn-sell {
@@ -64,9 +66,10 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.8rem;
+    font-weight: bold;
 }
 
-/* --- КАЗИНО --- */
+/* --- КАЗИНО (ОКНО И ОВЕРЛЕЙ) --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0;
@@ -78,81 +81,74 @@ body {
     z-index: 1000;
 }
 
-/* --- КАЗИНО (УВЕЛИЧЕННОЕ ОКНО) --- */
 .casino-content {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
     padding: 20px 30px;
-    max-width: 900px; /* Увеличили ширину */
-    width: 95%;
-    min-height: 80vh; /* Увеличили высоту */
+    max-width: 760px; /* Пункт 1: Уменьшено на 40px */
+    width: 92%;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 50px rgba(255, 204, 0, 0.2);
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
 }
 
-/* --- РУЛЕТКА (УВЕЛИЧЕННАЯ) --- */
-.roulette-wrapper {
-    position: relative;
-    width: 100%;
-    height: 140px; /* Чуть выше */
-    overflow: hidden;
-    margin: 15px 0;
-    background: #050505;
-    border-radius: 15px;
-    border: 1px solid #222;
+.close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 2rem;
+    cursor: pointer;
 }
 
-.reel-item-horizontal {
-    min-width: 120px; /* Базовая ширина */
-    width: 120px;
-    height: 110px;
-    margin: 0 5px; /* Отступы: итого 130px на один элемент */
-    flex-shrink: 0;
-    background: #1a1a1a;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3.5rem;
-    border-bottom: 5px solid #333;
-    transition: border-color 0.3s;
-}
-
-/* СЕТКА КЕЙСОВ */
+/* --- СЕТКА КЕЙСОВ И ПРОКАЧАННЫЙ СКРОЛЛ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Карточки кейсов больше */
-    gap: 20px;
-    max-height: 350px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    max-height: 380px; /* Пункт 1: Уменьшено */
     overflow-y: auto;
-    padding: 15px;
-    background: rgba(0,0,0,0.3);
+    padding: 10px 15px 10px 5px;
+    margin-top: 15px;
+    background: rgba(0,0,0,0.2);
     border-radius: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
 }
+
+.case-grid::-webkit-scrollbar { width: 6px; }
+.case-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+.case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.case-grid::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
+
 .case-card {
     background: #1a1a1a;
-    padding: 8px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 15px;
     cursor: pointer;
     border: 1px solid #333;
+    transition: 0.2s;
+    font-weight: bold;
 }
 
-.case-card:hover { border-color: #ffcc00; }
-.case-icon { font-size: 1.8rem; display: block; }
-.case-name { display: block; margin: 3px 0; font-weight: bold; font-size: 0.85rem; }
-.case-price { color: #ffcc00; font-size: 0.75rem; }
+.case-card:hover {
+    transform: translateY(-5px);
+    border-color: #ffcc00;
+}
 
-/* --- РУЛЕТКА (ВАЖНО ДЛЯ СКРИПТА) --- */
+.case-icon { font-size: 2.5rem; display: block; }
+.case-name { display: block; margin: 8px 0; font-weight: bold; }
+.case-price { color: #ffcc00; font-size: 0.9rem; }
+
+/* --- РУЛЕТКА --- */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 100px;
+    height: 130px;
     overflow: hidden;
-    margin: 10px 0;
+    margin: 20px 0;
     background: #050505;
     border-radius: 15px;
     border: 1px solid #222;
@@ -160,9 +156,11 @@ body {
 
 .selector {
     position: absolute;
-    left: 50%; top: 0;
+    left: 50%;
+    top: 0;
     transform: translateX(-50%);
-    width: 4px; height: 100%;
+    width: 4px;
+    height: 100%;
     background: #ffcc00;
     z-index: 10;
     box-shadow: 0 0 15px #ffcc00;
@@ -176,18 +174,18 @@ body {
 }
 
 .reel-item-horizontal {
-    min-width: 90px;
-    width: 90px; /* Фиксированная ширина для расчета JS */
+    min-width: 120px;
+    width: 120px;
     flex-shrink: 0;
-    height: 70px;
-    margin: 0 5px; /* Фиксированный отступ */
+    height: 100px;
+    margin: 0 3px;
     background: #1a1a1a;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
-    border-bottom: 3px solid #333;
+    font-size: 3rem;
+    border-bottom: 4px solid #333;
 }
 
 /* --- РЕДКОСТИ --- */
@@ -208,9 +206,10 @@ body {
     100% { filter: brightness(1); }
 }
 
+/* --- ПРЕДПРОСМОТР --- */
 .case-content-preview {
-    margin-top: 10px;
-    padding-top: 5px;
+    margin-top: 15px;
+    padding-top: 10px;
     border-top: 1px solid #222;
 }
 
@@ -218,5 +217,12 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
+}
+
+.chance-label {
+    display: block;
+    font-size: 0.65rem;
+    color: #888;
+    margin-top: 4px;
 }
