@@ -186,32 +186,29 @@ body {
 }
 
 /* --- РЕДКОСТИ --- */
-.rarity-common { border-color: #26de81 !important; }
-.rarity-rare { border-color: #45aaf2 !important; }
-.rarity-epic { border-color: #a55eea !important; }
-.rarity-mythic { border-color: #ff4757 !important; }
-.rarity-legendary { border-color: #ffcc00 !important; }
+.rarity-common { border-bottom: 4px solid #26de81 !important; }
+.rarity-rare { border-bottom: 4px solid #45aaf2 !important; }
+.rarity-epic { border-bottom: 4px solid #a55eea !important; }
+.rarity-mythic { border-bottom: 4px solid #ff4757 !important; }
+.rarity-legendary { border-bottom: 4px solid #ffcc00 !important; }
 
-/* Эффект для Вселенной */
+/* ЭФФЕКТ ВСЕЛЕННОЙ (ТЕПЕРЬ И ДЛЯ ГРАДИЕНТОВ) */
 .rarity-universe { 
-    border-color: #00ffff !important; 
-    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.3);
-    animation: pulse-universe 2s infinite;
-}
-
-/* Эффект для Кейса 12 (Градиент) */
-.rarity-gradient {
-    border-image: var(--item-grad) 1 !important;
-    border-style: solid !important;
-    border-width: 0 0 4px 0 !important;
-    animation: pulse-universe 2s infinite;
-    box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+    position: relative;
+    background: #111 !important;
+    animation: pulse-universe 2s infinite ease-in-out !important;
+    border-bottom: none !important; /* Убираем полосу под предметом */
 }
 
 @keyframes pulse-universe {
     0% { filter: brightness(1); transform: scale(1); }
-    50% { filter: brightness(1.3); transform: scale(1.02); }
+    50% { filter: brightness(1.4); transform: scale(1.02); }
     100% { filter: brightness(1); transform: scale(1); }
+}
+
+/* Стили для рулетки, чтобы градиентные предметы там тоже были без полос */
+.reel-item-horizontal.rarity-universe {
+    border-bottom: none !important;
 }
 
 /* --- ПРЕДПРОСМОТР --- */
