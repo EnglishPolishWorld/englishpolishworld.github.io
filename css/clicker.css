@@ -66,7 +66,7 @@ body {
     font-size: 0.8rem;
 }
 
-/* --- КАЗИНО (ОКНО И ОВЕРЛЕЙ) --- */
+/* --- КАЗИНО --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0;
@@ -82,10 +82,10 @@ body {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 10px 20px; /* Уменьшен padding */
+    padding: 10px 20px;
     max-width: 600px;
     width: 90%;
-    max-height: 90vh; /* Окно не выше 90% экрана */
+    max-height: 90vh;
     overflow: hidden;
     text-align: center;
     position: relative;
@@ -102,23 +102,17 @@ body {
     cursor: pointer;
 }
 
-/* --- СЕТКА КЕЙСОВ --- */
 .case-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
-    max-height: 220px; /* СИЛЬНО УМЕНЬШЕНА ВЫСОТА СПИСКА КЕЙСОВ */
+    max-height: 200px;
     overflow-y: auto;
     padding: 10px;
     margin-top: 10px;
     background: rgba(0,0,0,0.2);
     border-radius: 15px;
-    scrollbar-width: thin;
-    scrollbar-color: #333 transparent;
 }
-
-.case-grid::-webkit-scrollbar { width: 6px; }
-.case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
 .case-card {
     background: #1a1a1a;
@@ -126,7 +120,6 @@ body {
     border-radius: 12px;
     cursor: pointer;
     border: 1px solid #333;
-    transition: 0.2s;
 }
 
 .case-card:hover { border-color: #ffcc00; }
@@ -134,11 +127,11 @@ body {
 .case-name { display: block; margin: 3px 0; font-weight: bold; font-size: 0.85rem; }
 .case-price { color: #ffcc00; font-size: 0.75rem; }
 
-/* --- РУЛЕТКА --- */
+/* --- РУЛЕТКА (ВАЖНО ДЛЯ СКРИПТА) --- */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 100px; /* Уменьшена высота */
+    height: 100px;
     overflow: hidden;
     margin: 10px 0;
     background: #050505;
@@ -165,10 +158,10 @@ body {
 
 .reel-item-horizontal {
     min-width: 90px;
-    width: 90px;
+    width: 90px; /* Фиксированная ширина для расчета JS */
     flex-shrink: 0;
     height: 70px;
-    margin: 0 2px;
+    margin: 0 5px; /* Фиксированный отступ */
     background: #1a1a1a;
     border-radius: 10px;
     display: flex;
@@ -196,7 +189,6 @@ body {
     100% { filter: brightness(1); }
 }
 
-/* --- ПРЕДПРОСМОТР --- */
 .case-content-preview {
     margin-top: 10px;
     padding-top: 5px;
