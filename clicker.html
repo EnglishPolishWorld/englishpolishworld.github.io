@@ -6,8 +6,11 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=2.4">
+    <link rel="stylesheet" href="css/clicker.css?v=1.9999">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
+    <style>
+        * { font-weight: bold !important; }
+    </style>
 </head>
 <body>
     <div id="achievement-container"></div>
@@ -29,26 +32,21 @@
         <main class="container">
             <section class="game-section">
                 <h1>Casino Tycoon</h1>
+                <br><br>
                 <div class="stats-bar">
                     <h2>Balance: <span id="balance">0</span> ⭐</h2>
                 </div>
 
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">⭐</div>
-                    
-                    <div class="inventory-section" style="background:none; border:none; padding:0;">
-                        <h3 style="color:#888; font-size:0.8rem; text-align:left; margin-left:10px;">🕒 RECENT DROPS</h3>
-                        <div id="drop-history"></div>
-                    </div>
-
                     <div class="button-group" style="margin-top:20px;">
-                        <a href="games.html" class="action-button btn-reset" style="text-decoration:none; display:inline-block;">← Back</a>
-                        <button class="action-button" onclick="toggleCasino()" style="background:#ffcc00; color:#000;">🎰 Open Cases</button>
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
+                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000;">🎰 Open Cases</button>
                     </div>
                 </div>
 
                 <div class="inventory-section">
-                    <h3>📦 Your Inventory</h3>
+                    <h3>📦 Your Items</h3>
                     <div id="items-list" class="items-grid"></div>
                 </div>
 
@@ -56,14 +54,17 @@
                     <div class="casino-content" id="casino-card">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
                         <h2 style="color: #ffcc00;">Case Opening</h2>
+                        
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
                         </div>
+
                         <p id="casino-msg">Choose your fate!</p>
                         <div class="case-grid" id="case-list"></div>
+
                         <div id="case-preview-section" class="case-content-preview" style="display: none;">
-                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">LOOT TABLE:</h4>
+                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">LOOT TABLE & CHANCES:</h4>
                             <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
@@ -72,11 +73,11 @@
         </main>
     </div>
 
-<script>
+ <script>
     let coins = 0;
     let inventory = [];
-    let dropHistory = [];
     let isSpinning = false;
+    
     const UNIVERSE_PRICE = 999999999999999;
 
     const shopData = {
@@ -93,51 +94,62 @@
         c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [{n:"Universe", e:"🌌", p: UNIVERSE_PRICE, isUniverse: true}]}
     };
 
-    function mine() { coins++; render(); save(); }
+    // --- ДОСТИЖЕНИЯ ---
+    let unlockedAchievements = JSON.parse(localStorage.getItem('achievements_v3')) || [];
+    const achievementsList = [
+    // --- ОСНОВНЫЕ ---
+    { id: 'first_click', title: 'First Step', icon: '⭐', check: () => coins >= 1 },
+    { id: 'collector', title: 'Collector', icon: '📦', check: () => inventory.length >= 10 },
+    { id: 'gambler', title: 'High Roller', icon: '🎰', check: () => false }, // Вызывается в handleOpen
+    { id: 'god', title: 'Godlike', icon: '🌌', check: () => inventory.some(i => i.isUniverse) },
 
-    function save() { 
-        localStorage.setItem('tycoon_v3', coins); 
-        localStorage.setItem('inv_v3', JSON.stringify(inventory)); 
-        localStorage.setItem('history_v3', JSON.stringify(dropHistory));
+    // --- ПО РЕДКОСТИ (Первый Эпик, Мифик, Лега) ---
+    { id: 'first_epic', title: 'Purple Power', icon: '🟣', check: () => inventory.some(i => i.class === 'rarity-epic') },
+    { id: 'first_mythic', title: 'Red Legend', icon: '🔥', check: () => inventory.some(i => i.class === 'rarity-mythic') },
+    { id: 'first_legendary', title: 'Golden Boy', icon: '👑', check: () => inventory.some(i => i.class === 'rarity-legendary') },
+
+    // --- ПО БАЛАНСУ ---
+    { id: 'coins_10k', title: 'Starting Capital', icon: '💵', check: () => coins >= 10000 },
+    { id: 'rich', title: 'Millionaire', icon: '💰', check: () => coins >= 1000000 },
+    { id: 'coins_10m', title: 'Multi-Millionaire', icon: '💎', check: () => coins >= 10000000 },
+    { id: 'coins_1b', title: 'Billionaire', icon: '🏦', check: () => coins >= 1000000000 },
+    { id: 'coins_1t', title: 'Trillionaire', icon: '🏢', check: () => coins >= 1000000000000 },
+
+    // --- ЗА ПРОДАЖУ (Эти ачивки активируем вручную в функции sell) ---
+    { id: 'sell_1m', title: 'Big Deal', icon: '🤝', check: () => false },
+    { id: 'sell_1b', title: 'Market Master', icon: '📈', check: () => false },
+    { id: 'sell_1t', title: 'Global Economy', icon: '🌍', check: () => false }
+];
+
+    function showAchievement(ach) {
+        if (unlockedAchievements.includes(ach.id)) return;
+        unlockedAchievements.push(ach.id);
+        localStorage.setItem('achievements_v3', JSON.stringify(unlockedAchievements));
+
+        const container = document.getElementById('achievement-container');
+        const card = document.createElement('div');
+        card.className = 'achievement-card';
+        card.innerHTML = `<div class="achievement-icon">${ach.icon}</div><div class="achievement-info"><b>Achievement Unlocked!</b><span>${ach.title}</span></div>`;
+        container.appendChild(card);
+        setTimeout(() => card.classList.add('show'), 100);
+        setTimeout(() => {
+            card.classList.remove('show');
+            setTimeout(() => card.remove(), 500);
+        }, 4000);
     }
 
+    function checkAchievements() {
+        achievementsList.forEach(ach => { if (ach.check()) showAchievement(ach); });
+    }
+
+    // --- ИГРОВАЯ ЛОГИКА ---
+    function mine() { coins++; render(); save(); }
+    function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
     function load() {
         coins = parseInt(localStorage.getItem('tycoon_v3')) || 0;
         inventory = JSON.parse(localStorage.getItem('inv_v3')) || [];
-        dropHistory = JSON.parse(localStorage.getItem('history_v3')) || [];
         render(); 
-        renderHistory();
         generateCaseButtons();
-    }
-
-    function renderHistory() {
-        const historyEl = document.getElementById('drop-history');
-        if (!historyEl) return;
-        historyEl.innerHTML = dropHistory.map(item => `
-            <div class="history-item" style="border-color: ${item.color}">
-                <span>${item.e}</span>
-                <span style="color: ${item.color}">${item.n}</span>
-            </div>
-        `).join('');
-    }
-
-    function render() {
-        document.getElementById('balance').innerText = coins.toLocaleString();
-        document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
-            <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
-                <span style="font-size:3rem;">${item.e}</span>
-                <strong style="display:block;">${item.n}</strong>
-                <small style="color: #00ed9a;">${item.isUniverse ? '∞' : item.p.toLocaleString()} ⭐</small>
-                <button class="btn-sell" onclick="sell(${i})">Sell</button>
-            </div>
-        `).join('');
-    }
-
-    function sell(i) {
-        if (inventory[i].isUniverse) { alert("Cannot sell the Universe!"); return; }
-        coins += inventory[i].p;
-        inventory.splice(i, 1);
-        render(); save();
     }
 
     function toggleCasino() {
@@ -154,9 +166,56 @@
         return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
     }
 
+    function render() {
+        document.getElementById('balance').innerText = coins.toLocaleString();
+        document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
+            <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
+                <span style="font-size:3rem;">${item.e}</span>
+                <strong style="display:block;">${item.n}</strong>
+                <small style="color: #00ed9a;">
+                    ${(item.isUniverse || item.p >= UNIVERSE_PRICE) ? '∞' : item.p.toLocaleString()} ⭐
+                </small>
+                <button class="btn-sell" onclick="sell(${i})">Sell</button>
+            </div>
+        `).join('');
+        checkAchievements();
+    }
+
+    function handleOpen(id) {
+        if (isSpinning) return;
+        if (coins < shopData[id].cost) { alert("Not enough ⭐!"); return; }
+        showAchievement(achievementsList.find(a => a.id === 'gambler')); // Ачивка за первый кейс
+        spin(id);
+    }
+
+    function sell(i) {
+    const item = inventory[i];
+
+    if (item.isUniverse || item.p >= UNIVERSE_PRICE) { 
+        alert("Cannot sell the Universe! It is beyond value."); 
+        return; 
+    }
+
+    // --- ПРОВЕРКА АЧИВОК ЗА ПРОДАЖУ ---
+    if (item.p >= 1000000000000) {
+        showAchievement(achievementsList.find(a => a.id === 'sell_1t'));
+    } else if (item.p >= 1000000000) {
+        showAchievement(achievementsList.find(a => a.id === 'sell_1b'));
+    } else if (item.p >= 1000000) {
+        showAchievement(achievementsList.find(a => a.id === 'sell_1m'));
+    }
+    // ---------------------------------
+
+    coins += item.p;
+    inventory.splice(i, 1);
+    render(); 
+    save();
+}
+
+    // --- КАЗИНО ---
     function generateCaseButtons() {
         document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
-            <div class="case-card" onclick="spin('${id}')" onmouseover="showPreview('${id}')">
+            <div class="case-card" onclick="handleOpen('${id}')" onmouseover="showPreview('${id}')">
                 <span class="case-icon">${shopData[id].icon}</span>
                 <span class="case-name">${shopData[id].n}</span>
                 <span class="case-price">${shopData[id].cost.toLocaleString()} ⭐</span>
@@ -166,23 +225,30 @@
     function showPreview(id) {
         const box = document.getElementById('case-items-list');
         document.getElementById('case-preview-section').style.display = 'block';
-        box.innerHTML = shopData[id].items.map((it, idx) => {
-            const r = getRarityData(idx, it.isUniverse);
-            return `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid ${r.color}">${it.e}</div></div>`;
-        }).join('');
+        let itemsHtml = '';
+        if(id === 'c11') {
+            itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box">💨</div><span class="chance-label">99%</span></div>`;
+            itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe">🌌</div><span class="chance-label">1%</span></div>`;
+        } else {
+            itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box">💨</div><span class="chance-label">15%</span></div>`;
+            itemsHtml += shopData[id].items.map((it, idx) => {
+                const r = getRarityData(idx, it.isUniverse);
+                let ch = (idx < 5) ? "50%" : (idx < 7) ? "20%" : (idx < 9) ? "10%" : (idx < 11) ? "3%" : "1%";
+                return `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid ${r.color}">${it.e}</div><span class="chance-label">${ch}</span></div>`;
+            }).join('');
+        }
+        box.innerHTML = itemsHtml;
     }
 
     function spin(id) {
-        if (isSpinning) return;
-        if (coins < shopData[id].cost) { alert("Not enough ⭐!"); return; }
         coins -= shopData[id].cost;
         isSpinning = true;
         render();
-        
         const reel = document.getElementById('reel');
         const card = document.getElementById('casino-card');
         const msg = document.getElementById('casino-msg');
         
+        // Логика победы
         const luck = Math.random() * 100;
         let result;
         if (id === 'c11') {
@@ -198,18 +264,24 @@
         }
 
         let tape = '';
-        for(let i=0; i<60; i++) {
+        for(let i=0; i<65; i++) {
             let rIdx = Math.floor(Math.random() * shopData[id].items.length);
             let rItem = shopData[id].items[rIdx];
-            tape += `<div class="reel-item-horizontal">${rItem.e}</div>`;
+            let rRare = getRarityData(rIdx, rItem.isUniverse);
+            tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
         }
         reel.innerHTML = tape;
+        reel.style.transition = 'none';
+        reel.style.transform = 'translateX(0)';
+
         const items = reel.querySelectorAll('.reel-item-horizontal');
         items[55].innerText = result.e;
+        items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
         setTimeout(() => {
+            const itemWidth = 126; 
+            const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
             reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
-            const stopPos = (55 * 126) - (card.offsetWidth / 2) + 63;
             reel.style.transform = `translateX(-${stopPos}px)`;
         }, 50);
 
@@ -222,9 +294,6 @@
                 inventory.push(result);
                 msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
                 msg.style.color = result.color;
-                dropHistory.unshift(result);
-                if (dropHistory.length > 15) dropHistory.pop();
-                renderHistory();
             }
             render(); save();
         }, 4100);
