@@ -185,71 +185,68 @@ body {
     border-bottom: 4px solid #333;
 }
 
-/* --- РЕДКОСТИ С ДИНАМИЧЕСКИМ СВЕЧЕНИЕМ --- */
+/* --- РЕДКОСТИ С МЯГКИМ СВЕЧЕНИЕМ --- */
 
-/* Общая анимация пульсации для всех предметов */
-@keyframes pulse-glow {
-    0% { transform: scale(1); filter: brightness(1); }
-    50% { transform: scale(1.02); filter: brightness(1.3); }
-    100% { transform: scale(1); filter: brightness(1); }
+@keyframes pulse-soft {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+    100% { filter: brightness(1); }
 }
 
-/* Обычный (Зеленый) */
+/* Обычный (Мягкий зеленый) */
 .rarity-common { 
-    border-color: #26de81 !important; 
-    box-shadow: inset 0 0 15px rgba(38, 222, 129, 0.2), 0 0 10px rgba(38, 222, 129, 0.1);
-    animation: pulse-glow 3s infinite ease-in-out;
+    border-color: #2bcbba !important; 
+    box-shadow: inset 0 0 15px rgba(43, 203, 186, 0.1), 0 0 10px rgba(43, 203, 186, 0.05);
 }
 
-/* Редкий (Синий) */
+/* Редкий (Спокойный синий) */
 .rarity-rare { 
-    border-color: #45aaf2 !important; 
-    box-shadow: inset 0 0 15px rgba(69, 170, 242, 0.3), 0 0 15px rgba(69, 170, 242, 0.2);
-    animation: pulse-glow 2.5s infinite ease-in-out;
+    border-color: #4b7bec !important; 
+    box-shadow: inset 0 0 15px rgba(75, 123, 236, 0.15), 0 0 15px rgba(75, 123, 236, 0.1);
 }
 
-/* Эпический (Фиолетовый) */
+/* Эпический (Приглушенный фиолетовый) */
 .rarity-epic { 
     border-color: #a55eea !important; 
-    box-shadow: inset 0 0 20px rgba(165, 94, 234, 0.4), 0 0 20px rgba(165, 94, 234, 0.3);
-    animation: pulse-glow 2s infinite ease-in-out;
+    box-shadow: inset 0 0 20px rgba(165, 94, 234, 0.2), 0 0 20px rgba(165, 94, 234, 0.15);
 }
 
-/* Мифический (Красный) */
+/* Мифический (Глубокий красный) */
 .rarity-mythic { 
-    border-color: #ff4757 !important; 
-    box-shadow: inset 0 0 25px rgba(255, 71, 87, 0.5), 0 0 25px rgba(255, 71, 87, 0.4);
-    animation: pulse-glow 1.5s infinite ease-in-out;
+    border-color: #eb4d4b !important; 
+    box-shadow: inset 0 0 20px rgba(235, 77, 75, 0.25), 0 0 20px rgba(235, 77, 75, 0.2);
 }
 
-/* Легендарный (Золотой) */
+/* Легендарный (Теплое золото) */
 .rarity-legendary { 
-    border-color: #ffcc00 !important; 
-    box-shadow: inset 0 0 30px rgba(255, 204, 0, 0.6), 0 0 30px rgba(255, 204, 0, 0.5);
-    animation: pulse-glow 1.2s infinite ease-in-out;
+    border-color: #f1c40f !important; 
+    box-shadow: inset 0 0 25px rgba(241, 196, 15, 0.3), 0 0 25px rgba(241, 196, 15, 0.2);
+    animation: pulse-soft 3s infinite ease-in-out;
 }
 
-/* --- ВСЕЛЕННАЯ (РАДУЖНЫЙ ГРАДИЕНТ) --- */
+/* --- ВСЕЛЕННАЯ (ПЛАВНЫЙ ГРАДИЕНТ) --- */
 .rarity-universe { 
-    border-color: #00ffff !important; 
-    position: relative;
-    z-index: 1;
-    animation: pulse-universe 2s infinite linear, glow-rainbow 3s infinite linear;
+    border-color: #ffffff !important;
+    animation: glow-rainbow-soft 8s infinite linear;
 }
 
-@keyframes glow-rainbow {
-    0% { box-shadow: inset 0 0 20px #ff0000, 0 0 20px #ff0000; border-color: #ff0000 !important; }
-    20% { box-shadow: inset 0 0 20px #ffcc00, 0 0 20px #ffcc00; border-color: #ffcc00 !important; }
-    40% { box-shadow: inset 0 0 20px #00ff00, 0 0 20px #00ff00; border-color: #00ff00 !important; }
-    60% { box-shadow: inset 0 0 20px #00ffff, 0 0 20px #00ffff; border-color: #00ffff !important; }
-    80% { box-shadow: inset 0 0 20px #0000ff, 0 0 20px #0000ff; border-color: #0000ff !important; }
-    100% { box-shadow: inset 0 0 20px #ff00ff, 0 0 20px #ff00ff; border-color: #ff00ff !important; }
-}
-
-@keyframes pulse-universe {
-    0% { transform: scale(1); filter: saturate(1.5) brightness(1); }
-    50% { transform: scale(1.05); filter: saturate(2) brightness(1.8); }
-    100% { transform: scale(1); filter: saturate(1.5) brightness(1); }
+@keyframes glow-rainbow-soft {
+    0% { 
+        box-shadow: inset 0 0 20px rgba(255, 100, 100, 0.3), 0 0 20px rgba(255, 100, 100, 0.2); 
+        border-color: #ff7675 !important;
+    }
+    33% { 
+        box-shadow: inset 0 0 20px rgba(116, 185, 255, 0.3), 0 0 20px rgba(116, 185, 255, 0.2); 
+        border-color: #74b9ff !important;
+    }
+    66% { 
+        box-shadow: inset 0 0 20px rgba(162, 155, 254, 0.3), 0 0 20px rgba(162, 155, 254, 0.2); 
+        border-color: #a29bfe !important;
+    }
+    100% { 
+        box-shadow: inset 0 0 20px rgba(255, 100, 100, 0.3), 0 0 20px rgba(255, 100, 100, 0.2); 
+        border-color: #ff7675 !important;
+    }
 }
 /* --- ПРЕДПРОСМОТР --- */
 .case-content-preview {
