@@ -185,24 +185,72 @@ body {
     border-bottom: 4px solid #333;
 }
 
-/* --- РЕДКОСТИ --- */
-.rarity-common { border-color: #26de81 !important; }
-.rarity-rare { border-color: #45aaf2 !important; }
-.rarity-epic { border-color: #a55eea !important; }
-.rarity-mythic { border-color: #ff4757 !important; }
-.rarity-legendary { border-color: #ffcc00 !important; }
+/* --- РЕДКОСТИ С ДИНАМИЧЕСКИМ СВЕЧЕНИЕМ --- */
+
+/* Общая анимация пульсации для всех предметов */
+@keyframes pulse-glow {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.02); filter: brightness(1.3); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Обычный (Зеленый) */
+.rarity-common { 
+    border-color: #26de81 !important; 
+    box-shadow: inset 0 0 15px rgba(38, 222, 129, 0.2), 0 0 10px rgba(38, 222, 129, 0.1);
+    animation: pulse-glow 3s infinite ease-in-out;
+}
+
+/* Редкий (Синий) */
+.rarity-rare { 
+    border-color: #45aaf2 !important; 
+    box-shadow: inset 0 0 15px rgba(69, 170, 242, 0.3), 0 0 15px rgba(69, 170, 242, 0.2);
+    animation: pulse-glow 2.5s infinite ease-in-out;
+}
+
+/* Эпический (Фиолетовый) */
+.rarity-epic { 
+    border-color: #a55eea !important; 
+    box-shadow: inset 0 0 20px rgba(165, 94, 234, 0.4), 0 0 20px rgba(165, 94, 234, 0.3);
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+/* Мифический (Красный) */
+.rarity-mythic { 
+    border-color: #ff4757 !important; 
+    box-shadow: inset 0 0 25px rgba(255, 71, 87, 0.5), 0 0 25px rgba(255, 71, 87, 0.4);
+    animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+/* Легендарный (Золотой) */
+.rarity-legendary { 
+    border-color: #ffcc00 !important; 
+    box-shadow: inset 0 0 30px rgba(255, 204, 0, 0.6), 0 0 30px rgba(255, 204, 0, 0.5);
+    animation: pulse-glow 1.2s infinite ease-in-out;
+}
+
+/* --- ВСЕЛЕННАЯ (РАДУЖНЫЙ ГРАДИЕНТ) --- */
 .rarity-universe { 
     border-color: #00ffff !important; 
-    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.3);
-    animation: pulse-universe 2s infinite;
+    position: relative;
+    z-index: 1;
+    animation: pulse-universe 2s infinite linear, glow-rainbow 3s infinite linear;
+}
+
+@keyframes glow-rainbow {
+    0% { box-shadow: inset 0 0 20px #ff0000, 0 0 20px #ff0000; border-color: #ff0000 !important; }
+    20% { box-shadow: inset 0 0 20px #ffcc00, 0 0 20px #ffcc00; border-color: #ffcc00 !important; }
+    40% { box-shadow: inset 0 0 20px #00ff00, 0 0 20px #00ff00; border-color: #00ff00 !important; }
+    60% { box-shadow: inset 0 0 20px #00ffff, 0 0 20px #00ffff; border-color: #00ffff !important; }
+    80% { box-shadow: inset 0 0 20px #0000ff, 0 0 20px #0000ff; border-color: #0000ff !important; }
+    100% { box-shadow: inset 0 0 20px #ff00ff, 0 0 20px #ff00ff; border-color: #ff00ff !important; }
 }
 
 @keyframes pulse-universe {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(1.5); }
-    100% { filter: brightness(1); }
+    0% { transform: scale(1); filter: saturate(1.5) brightness(1); }
+    50% { transform: scale(1.05); filter: saturate(2) brightness(1.8); }
+    100% { transform: scale(1); filter: saturate(1.5) brightness(1); }
 }
-
 /* --- ПРЕДПРОСМОТР --- */
 .case-content-preview {
     margin-top: 15px;
